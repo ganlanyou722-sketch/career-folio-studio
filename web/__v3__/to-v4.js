@@ -7,8 +7,8 @@
     wrap.setAttribute("data-version-dock", "1");
     wrap.style.cssText = ["position:fixed", "right:22px", "bottom:22px", "z-index:90", "display:flex", "gap:8px"].join(";");
     [
-      { label: "版本 4 · 三卡版", href: "../index.html", primary: true },
-      { label: "版本 2", href: "../__v2__/index.html", primary: false },
+      { label: "版本 5 · 布局增强", href: "../index.html", primary: true },
+      { label: "版本 4 · 三卡版", href: "../__v4__/index.html", primary: false },
     ].forEach(function (item) {
       var a = document.createElement("a");
       a.href = item.href;

@@ -14,7 +14,7 @@
       "gap:8px",
     ].join(";");
     [
-      { label: "版本 4 · 三卡版", href: "../index.html", primary: true },
+      { label: "版本 5 · 布局增强", href: "../index.html", primary: true },
       { label: "版本 3 · 证据链", href: "../__v3__/index.html", primary: false },
     ].forEach(function (item) {
       var a = document.createElement("a");

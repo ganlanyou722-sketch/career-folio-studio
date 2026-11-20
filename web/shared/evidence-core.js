@@ -439,7 +439,7 @@
       {
         dim: "表达收敛",
         score: body.length ? 1 - longOnes / body.length : 0,
-        basis: longOnes + " 段超过 60 字，面试时不容易一口气讲完",
+        basis: longOnes ? longOnes + " / " + body.length + " 段超过 60 字，口述容易散" : "全部 " + body.length + " 段都在一句话内，口述不易散",
       },
     ];
     const overall = dims.reduce((s, d) => s + d.score, 0) / dims.length;
