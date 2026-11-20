@@ -14,8 +14,8 @@
       "gap:8px",
     ].join(";");
     [
-      { label: "版本 2 · 证据版", href: "../__v2__/index.html", primary: false },
-      { label: "版本 3 · 证据链", href: "../index.html", primary: true },
+      { label: "版本 3 · 证据链", href: "../__v3__/index.html", primary: false },
+      { label: "版本 4 · 三卡版", href: "../index.html", primary: true },
     ].forEach(function (item) {
       var a = document.createElement("a");
       a.href = item.href + (location.hash || "#home");

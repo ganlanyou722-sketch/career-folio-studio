@@ -31,7 +31,7 @@ const routes = {
   "GET /api/health": () => ({
     ok: true,
     service: "career-folio-evidence",
-    version: 3,
+    version: 4,
     engine: "shared/evidence-core.js",
     endpoints: [
       "POST /api/risk/scan",

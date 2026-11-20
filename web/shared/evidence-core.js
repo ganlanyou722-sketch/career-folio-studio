@@ -24,7 +24,7 @@
     { id: "idcard", level: "L1", label: "扣押证件", words: ["扣押身份证", "押身份证", "证件原件", "上交毕业证", "暂扣证件"], ask: "入职需要上交证件原件吗？能否只提供复印件并注明用途？" },
     { id: "unpaid", level: "L1", label: "无薪试岗", words: ["无薪试岗", "试岗不付", "试用期不发工资", "实习无薪", "免费试用期"], ask: "试岗期是否有工资、是否签协议？试岗期的社保如何处理？" },
     { id: "bond", level: "L1", label: "违约金/竞业", words: ["违约金", "竞业限制", "竞业协议", "服务期"], ask: "违约金的计算依据是什么？竞业限制的补偿标准与期限写明了吗？" },
-    { id: "social", level: "L2", label: "社保与合同", words: ["不缴社保", "转正后缴", "劳务合同", "外包合同", "派遣"], ask: "劳动合同的签约主体是谁？社保从入职当月开始缴吗？" },
+    { id: "social", level: "L2", label: "社保与合同", words: ["不缴社保", "不缴纳社保", "不交社保", "社保自理", "转正后缴", "转正补缴", "劳务合同", "外包合同", "派遣"], ask: "劳动合同的签约主体是谁？社保从入职当月开始缴吗？" },
     { id: "salary", level: "L2", label: "薪资结构", words: ["底薪", "提成", "绩效占比", "综合薪资", "到手"], ask: "固定部分与浮动部分各占多少？绩效的考核口径和发放周期是什么？" },
     { id: "hours", level: "L2", label: "工时与加班", words: ["大小周", "单休", "996", "弹性工作", "随时待命", "值班"], ask: "每周实际工作几天？加班是否有调休或加班费？" },
     { id: "reimburse", level: "L2", label: "垫付与报销", words: ["垫付", "自费出差", "报销周期", "垫资"], ask: "出差和业务费用需要个人先垫付吗？报销周期多久？" },
@@ -49,6 +49,14 @@
     ["社群运营", "社群活动", "内容运营"],
     ["项目管理", "排期", "跨部门", "协调"],
     ["汇报", "答辩", "路演", "演示"],
+    ["店铺运营", "电商运营", "店铺日常", "活动报名", "大促", "双十一"],
+    ["选品", "上架", "商品上架", "库存"],
+    ["投放", "广告投放", "信息流", "投流", "ROI"],
+    ["达人", "KOL", "KOC", "内容排期", "达人资源"],
+    ["素材", "内容素材", "图文", "短视频"],
+    ["品牌方", "客户对接", "对接品牌方", "商务", "结算"],
+    ["复盘", "数据复盘", "效果复盘", "月度复盘"],
+    ["客服", "售后", "客诉"],
   ];
 
   const cleaner = (s) => String(s ?? "").replace(/\s+/g, " ").trim();
@@ -112,7 +120,14 @@
       .filter(Boolean);
     const isBonus = (s) => /加分|优先|更佳|者优先|有…?经验优先/.test(s);
     const isDuty = (s) => /负责|参与|协助|推进|维护|支持|完成/.test(s);
-    const requirements = lines.filter((s) => !isBonus(s) && s.length <= 90 && s.length > 3);
+    /* 小标题（岗位职责：/任职要求：）和风险条款（试用期不缴社保）不是「要求」，不混进对照表 */
+    const isHeader = (s) =>
+      /^[^，。；]{2,10}[：:]$/.test(s) ||
+      /^(岗位职责|工作职责|职位描述|岗位描述|任职要求|岗位要求|任职资格|其他说明|其他|福利待遇|福利|薪资待遇|工作地点|工作内容)/.test(s);
+    const isRisk = (s) => (scanRisk(s).hits || []).length > 0;
+    const requirements = lines.filter(
+      (s) => !isBonus(s) && !isHeader(s) && !isRisk(s) && s.length <= 90 && s.length > 3,
+    );
     return {
       requirements: requirements.map((s) => ({ text: s, source: s })),
       bonus: lines.filter(isBonus),
@@ -198,7 +213,11 @@
       const covered = bodyBlocks.some((b) => {
         const t = cleaner(b.text);
         const parts = DOMAINS.filter((set) => set.some((w) => text.includes(w))).flat();
-        return t.includes(text) || parts.some((p) => t.includes(p));
+        const clauses = text
+          .split(/[，,、；;：:（）()]/)
+          .map((s) => s.trim())
+          .filter((s) => s.length >= 4);
+        return t.includes(text) || clauses.some((c) => t.includes(c.slice(0, 12))) || parts.some((p) => t.includes(p));
       });
       return { text, covered };
     });
@@ -440,11 +459,34 @@
   /** STAR 改写：把用户原话按四格重排，缺的格子给可填的提示，不替他编事实 */
   function rewriteStar(answer) {
     const list = sentences(answer);
-    const pick = (keys) => list.find((s) => keys.some((k) => s.includes(k)));
-    const s = pick(STAR_HINTS.S);
-    const t = pick(STAR_HINTS.T);
-    const a = pick(STAR_HINTS.A);
-    const r = pick(STAR_HINTS.R);
+    /* 按句序定位：背景在最前，结果通常在最后，四格不重复用同一句 */
+    const has = (s, key) => STAR_HINTS[key].some((k) => s.includes(k));
+    const used = {};
+    const take = (key, from) => {
+      for (let i = Math.max(0, from); i < list.length; i++) {
+        if (!used[i] && has(list[i], key)) {
+          used[i] = 1;
+          return i;
+        }
+      }
+      return -1;
+    };
+    const sIdx = take("S", 0);
+    const tIdx = take("T", sIdx >= 0 ? sIdx + 1 : 0);
+    const aIdx = take("A", Math.max(sIdx, tIdx) + 1);
+    let rIdx = -1;
+    for (let i = list.length - 1; i >= 0; i--) {
+      if (!used[i] && has(list[i], "R")) {
+        rIdx = i;
+        used[i] = 1;
+        break;
+      }
+    }
+    const pick = (i) => (i >= 0 ? list[i] : "");
+    const s = pick(sIdx);
+    const t = pick(tIdx);
+    const a = pick(aIdx);
+    const r = pick(rIdx);
     const parts = [
       { key: "情境", text: s || "【待补】当时在什么项目/团队、什么阶段" },
       { key: "任务", text: t || "【待补】你要解决的具体问题与衡量标准" },
@@ -467,9 +509,10 @@
     const star = rewriteStar(answer);
     const grade = gradeQuestion(question, input?.requirements || []);
     const missingCount = star.missing.length;
+    /* 预估只增不减：基数不低于当前分，缺格与缺数字才加分，封顶 100 */
     const estimate = Math.min(
-      96,
-      base.score + missingCount * 10 + (base.metric ? 0 : 8),
+      100,
+      Math.max(base.score, base.score + missingCount * 8 + (base.metric ? 0 : 6)),
     );
     return {
       question,
