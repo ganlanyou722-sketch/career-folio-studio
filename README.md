@@ -4,7 +4,7 @@
 
 **把散落的求职材料整理成可追溯到原件的「事实」，再用同一份事实出多个岗位的简历、准备面试。**
 
-[**打开在线工作台 →**](https://ganlanyou722-sketch.github.io/career-folio-studio/)　·　纯静态　·　无需注册　·　数据只留在你的浏览器
+[**打开在线工作台 →**](https://chase1960.github.io/career-folio-studio/)　·　纯静态　·　无需注册　·　数据只留在你的浏览器
 
 </div>
 
@@ -12,7 +12,10 @@
 
 ## 在线体验
 
-**https://ganlanyou722-sketch.github.io/career-folio-studio/**
+**https://chase1960.github.io/career-folio-studio/**
+
+> 发布说明：对外访问地址为上方链接（镜像仓库 chase1960/career-folio-studio，Pages 已开启）。主库 ganlanyou722-sketch/career-folio-studio 的 Pages 开启后，同路径地址同样生效。
+
 
 打开即用。首次进入会载入一套示例数据（产品实习生、校园服务大赛、课程研究），可以随意试；点左下角「个人工作空间」里的清空入口即可回到空白。
 
