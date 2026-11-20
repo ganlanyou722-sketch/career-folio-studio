@@ -219,7 +219,7 @@
     S: ["当时", "背景", "项目", "团队", "阶段", "期间", "实习", "课程", "社团", "担任", "所在", "一次"],
     T: ["目标", "负责", "需要", "要求", "要解决", "任务", "指标"],
     A: ["我", "梳理", "搭建", "推动", "分析", "设计", "跟进", "协调", "组织", "落地", "优化"],
-    R: ["结果", "最终", "提升", "降低", "交付", "上线", "拿到", "完成", "%", "倍"],
+    R: ["结果", "最终", "提升", "降低", "交付", "上线", "拿到", "完成", "%", "倍", "压到", "缩短", "节省", "增长", "翻倍"],
   };
 
   /** 回答诊断：STAR 四要素 + 量化 + 追问预测 */
@@ -280,6 +280,228 @@
     };
   }
 
+  /* ==================== v3：证据台账 / 匹配雷达 / 面试复盘 ==================== */
+
+  /** 来源等级：A 原文、B 二手材料、C 通用经验、D 无来源 */
+  const SOURCE_TIERS = {
+    A: { label: "原文", hint: "可在 JD 或原件里逐字指到" },
+    B: { label: "二手", hint: "来自公司陈述、公开资料，需再核对" },
+    C: { label: "通用", hint: "经验性问题，不代表这家公司" },
+    D: { label: "无来源", hint: "没有任何出处，只能当假设" },
+  };
+
+  /** 面经题库：每条带出处与核实等级，用来做「可信面经」而不是随机刷题 */
+  const QUESTION_BANK = [
+    { q: "介绍一下你最有成就感的一段经历", tier: "C", source: "通用面试题库", dim: "自我陈述" },
+    { q: "说一次你和别人意见不一致的经历", tier: "C", source: "通用面试题库", dim: "协作" },
+    { q: "讲一次失败，你学到了什么", tier: "C", source: "通用面试题库", dim: "反思" },
+    { q: "你为什么选择我们公司", tier: "B", source: "公开面经合集（需自行核对是否同岗位）", dim: "动机" },
+    { q: "这个岗位的日常你会怎么安排", tier: "B", source: "公开面经合集（互联网运营方向）", dim: "岗位理解" },
+    { q: "你还有什么想问我们的", tier: "C", source: "通用面试题库", dim: "反问" },
+  ];
+
+  /** 一页式风险卡片要用的三句话：按等级挑最该问的 */
+  function topAsks(rows) {
+    const order = ["L1", "L2", "L3"];
+    const picked = [];
+    for (const lv of order) {
+      const hit = rows.find((r) => r.type === "risk" && r.level === lv);
+      if (hit) picked.push({ level: lv, title: hit.title, ask: hit.ask, quote: hit.quote });
+    }
+    return picked;
+  }
+
+  /**
+   * 功能 1 的底座：把 JD、公司材料、简历缺口汇成一本证据台账。
+   * 每行都必须带 quote 与 source，覆盖率就是「能指回出处」的比例。
+   */
+  function buildLedger(input) {
+    const jd = String(input?.jdText || "");
+    const company = String(input?.companyText || "");
+    const rows = [];
+
+    (scanRisk(jd).hits || []).forEach((h, i) => {
+      rows.push({
+        id: "r" + i,
+        type: "risk",
+        level: h.level,
+        title: h.label,
+        quote: h.quote,
+        source: "JD 原文",
+        sourceTier: "A",
+        ask: h.ask,
+        covered: true,
+      });
+    });
+
+    sentences(company)
+      .filter((s) => /[\d]|承诺|保证|包|预计|计划|规模|人数|亿元|万|上市|融资/.test(s))
+      .forEach((s, i) => {
+        rows.push({
+          id: "c" + i,
+          type: "claim",
+          level: "L3",
+          title: "公司陈述",
+          quote: s.trim(),
+          source: "公司材料 · 第 " + (i + 1) + " 句",
+          sourceTier: "B",
+          ask: "这条有没有书面出处？能否给一份可核对的材料？",
+          covered: true,
+        });
+      });
+
+    (input?.gaps || []).forEach((g, i) => {
+      rows.push({
+        id: "g" + i,
+        type: "gap",
+        level: g.level || "L3",
+        title: "证据缺口",
+        quote: g.text || "",
+        source: g.source || "经历库",
+        sourceTier: g.sourceTier || "D",
+        ask: "这一段有没有具体例子或数字可以补？",
+        covered: !!g.covered,
+      });
+    });
+
+    const byLevel = { L1: 0, L2: 0, L3: 0 };
+    rows.forEach((r) => {
+      if (r.type === "risk") byLevel[r.level] = (byLevel[r.level] || 0) + 1;
+    });
+    const tiers = { A: 0, B: 0, C: 0, D: 0 };
+    rows.forEach((r) => {
+      tiers[r.sourceTier] = (tiers[r.sourceTier] || 0) + 1;
+    });
+    return {
+      rows,
+      total: rows.length,
+      coveredCount: rows.filter((r) => r.covered).length,
+      coverage: rows.length ? rows.filter((r) => r.covered).length / rows.length : 0,
+      byLevel,
+      tiers,
+      asks: topAsks(rows),
+    };
+  }
+
+  /**
+   * 功能 2 的底座：五个维度，每维都带一句依据，避免「雷达图好看但没理由」。
+   */
+  function radarDims(input) {
+    const blocks = input?.blocks || [];
+    const reqs = (input?.requirements || []).map((r) => (typeof r === "string" ? r : r.text));
+    const mats = input?.materials || [];
+    const audit = auditResume(blocks, reqs);
+    const body = blocks.filter((b) => (b.type === "body" || b.type === "heading") && cleaner(b.text));
+    const withSrc = body.filter((b) => b.source || b.sourceId || b.materialId).length;
+    const withNum = body.filter((b) => hasMetric(b.text)).length;
+    const verified = mats.filter((m) => m.status === "已核对").length;
+    const longOnes = body.filter((b) => cleaner(b.text).length > 60).length;
+    const dims = [
+      {
+        dim: "JD 覆盖",
+        score: audit.coverage,
+        basis: audit.requirementRows.filter((r) => r.covered).length + " / " + (reqs.length || 0) + " 条要求已写进简历",
+      },
+      {
+        dim: "证据厚度",
+        score: body.length ? withSrc / body.length : 0,
+        basis: withSrc + " / " + body.length + " 段能指回原件",
+      },
+      {
+        dim: "量化程度",
+        score: body.length ? withNum / body.length : 0,
+        basis: withNum + " / " + body.length + " 段带数字",
+      },
+      {
+        dim: "材料可信",
+        score: mats.length ? verified / mats.length : 0,
+        basis: "材料已核对 " + verified + " / " + mats.length + " 份",
+      },
+      {
+        dim: "表达收敛",
+        score: body.length ? 1 - longOnes / body.length : 0,
+        basis: longOnes + " 段超过 60 字，面试时不容易一口气讲完",
+      },
+    ];
+    const overall = dims.reduce((s, d) => s + d.score, 0) / dims.length;
+    return { dims, overall, audit };
+  }
+
+  /** 咨询题目的核实等级：JD 里出现的算 A，面经库里的按库里等级，其余 C */
+  function gradeQuestion(question, requirements) {
+    const q = String(question || "");
+    if ((requirements || []).some((r) => q.includes(typeof r === "string" ? r : r.text)))
+      return { tier: "A", source: "该岗位 JD 原文要求", note: "题面直接来自岗位要求" };
+    const bank = QUESTION_BANK.find((b) => b.q === q || q.includes(b.q.slice(0, 6)));
+    if (bank) return { tier: bank.tier, source: bank.source, note: "来自面经库，需自行核对是否同岗位" };
+    return { tier: "C", source: "通用面试题库", note: "经验性问题，不代表这家公司" };
+  }
+
+  /** STAR 改写：把用户原话按四格重排，缺的格子给可填的提示，不替他编事实 */
+  function rewriteStar(answer) {
+    const list = sentences(answer);
+    const pick = (keys) => list.find((s) => keys.some((k) => s.includes(k)));
+    const s = pick(STAR_HINTS.S);
+    const t = pick(STAR_HINTS.T);
+    const a = pick(STAR_HINTS.A);
+    const r = pick(STAR_HINTS.R);
+    const parts = [
+      { key: "情境", text: s || "【待补】当时在什么项目/团队、什么阶段" },
+      { key: "任务", text: t || "【待补】你要解决的具体问题与衡量标准" },
+      { key: "行动", text: a || "【待补】你本人做了什么，分几步" },
+      { key: "结果", text: r || "【待补】结果与可核对的数字（人数、时长、比例）" },
+    ];
+    const missing = parts.filter((p) => p.text.startsWith("【待补】")).map((p) => p.key);
+    const text = parts.map((p) => p.key + "：" + p.text).join("\n");
+    return { parts, missing, text };
+  }
+
+  /**
+   * 功能 3：逐题复盘。返回诊断、改写、追问、核实等级，
+   * 并把「改写后的预估分」明确标成预估，不冒充实测。
+   */
+  function reviewAnswer(input) {
+    const question = String(input?.question || "");
+    const answer = String(input?.answer || "");
+    const base = diagnoseAnswer(question, answer);
+    const star = rewriteStar(answer);
+    const grade = gradeQuestion(question, input?.requirements || []);
+    const missingCount = star.missing.length;
+    const estimate = Math.min(
+      96,
+      base.score + missingCount * 10 + (base.metric ? 0 : 8),
+    );
+    return {
+      question,
+      answer,
+      grade,
+      score: base.score,
+      star: base.star,
+      metric: base.metric,
+      fixes: base.fixes,
+      followUps: base.followUps,
+      rewrite: star,
+      estimate,
+      gaps: missingCount,
+    };
+  }
+
+  /** 核实等级分布，给「可信面经」一个可看的形状 */
+  function credibilityMix(records) {
+    const counts = { A: 0, B: 0, C: 0, D: 0 };
+    (records || []).forEach((r) => {
+      const tier = r?.grade?.tier || "D";
+      counts[tier] = (counts[tier] || 0) + 1;
+    });
+    const total = (records || []).length || 1;
+    return Object.keys(counts).map((k) => ({
+      tier: k,
+      label: SOURCE_TIERS[k].label,
+      count: counts[k],
+      share: counts[k] / total,
+    }));
+  }
+
   return {
     LEVELS,
     RISK_RULES,
@@ -293,5 +515,13 @@
     libraryAudit,
     hasMetric,
     sentences,
+    SOURCE_TIERS,
+    QUESTION_BANK,
+    buildLedger,
+    radarDims,
+    gradeQuestion,
+    rewriteStar,
+    reviewAnswer,
+    credibilityMix,
   };
 });

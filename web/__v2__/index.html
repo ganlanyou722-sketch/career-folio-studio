@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#254b3c" />
+    <title>履历间 · 中文求职工作台</title>
+    <link rel="icon" href="assets/brand.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="shared/workspace.css" />
+    <link rel="stylesheet" href="modules/experience/styles.css" />
+    <link rel="stylesheet" href="modules/match/styles.css" />
+    <link rel="stylesheet" href="modules/resume/styles.css" />
+    <link rel="stylesheet" href="shared/task-views.css" />
+    <link rel="stylesheet" href="shared/v2.css?v=4" />
+  </head>
+  <body>
+    <aside id="sidebar"></aside>
+    <div id="layout">
+      <header id="top"></header>
+      <main id="main" tabindex="-1"></main>
+    </div>
+    <div id="overlay"></div>
+    <div id="toasts" role="status" aria-live="polite"></div>
+    <script src="shared/illustrations.js"></script>
+    <script src="shared/workspace.js"></script>
+    <script src="modules/experience/index.js"></script>
+    <script src="modules/match/index.js"></script>
+    <script src="modules/resume/index.js"></script>
+    <script src="shared/task-helpers.js"></script>
+    <script src="modules/start/index.js"></script>
+    <script src="modules/interview/index.js"></script>
+    <script src="shared/evidence-core.js?v=4"></script>
+    <script src="shared/v2.js?v=4"></script>
+    <script>
+      App.boot();
+      V2.boot();
+    </script>
+  <script src="to-v3.js"></script>
+</body>
+</html>

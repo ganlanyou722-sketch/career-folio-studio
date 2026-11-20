@@ -31,7 +31,7 @@ const routes = {
   "GET /api/health": () => ({
     ok: true,
     service: "career-folio-evidence",
-    version: 2,
+    version: 3,
     engine: "shared/evidence-core.js",
     endpoints: [
       "POST /api/risk/scan",
@@ -39,6 +39,10 @@ const routes = {
       "POST /api/match",
       "POST /api/resume/audit",
       "POST /api/interview/diagnose",
+      "POST /api/library/audit",
+      "POST /api/ledger",
+      "POST /api/radar",
+      "POST /api/interview/review",
     ],
     rules: engine.RISK_RULES.length,
   }),
@@ -51,6 +55,14 @@ const routes = {
     engine.diagnoseAnswer(body.question || "", body.answer || ""),
   "POST /api/library/audit": (body) =>
     engine.libraryAudit(body.materials || [], body.experiences || []),
+  "POST /api/ledger": (body) => engine.buildLedger(body || {}),
+  "POST /api/radar": (body) =>
+    engine.radarDims({
+      blocks: body.blocks || [],
+      requirements: body.requirements || [],
+      materials: body.materials || [],
+    }),
+  "POST /api/interview/review": (body) => engine.reviewAnswer(body || {}),
 };
 
 function send(res, code, payload, type = "application/json; charset=utf-8") {
