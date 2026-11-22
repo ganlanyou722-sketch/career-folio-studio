@@ -15,7 +15,7 @@
     ].join(";");
     [
       { label: "版本 3 · 证据链", href: "../__v3__/index.html", primary: false },
-      { label: "版本 5 · 布局增强", href: "../index.html", primary: true },
+      { label: "版本 6 · V1 界面 + 内核", href: "../index.html", primary: true },
     ].forEach(function (item) {
       var a = document.createElement("a");
       a.href = item.href + (location.hash || "#home");

@@ -1,0 +1,270 @@
+/* v5：只补 v3 没有的部件，布局与配色沿用 v3，不改工作台。 */
+
+.v5-wrap .v3-card {
+  margin-bottom: 14px;
+}
+
+/* 01/02/03 已是完整工作面：旧版同页工作台折叠，需要时可展开 */
+#main.v5-fold {
+  display: none;
+}
+
+.v5-legacy {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 4px 0 18px;
+  padding: 8px 12px;
+  border-top: 1px dashed #dbe2d5;
+  font-size: 12px;
+  color: #7b8a7f;
+}
+.v5-legacy button {
+  flex: none;
+  cursor: pointer;
+}
+
+.v5-lead {
+  margin: 0 0 10px;
+  padding: 0;
+  color: #5d6b5f;
+  font-size: 12.5px;
+  line-height: 1.7;
+}
+
+/* 输入区：并排两栏，窄屏自动落成一栏 */
+.v5-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.v5-inputs label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #375f46;
+}
+.v5-inputs textarea {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 118px;
+  border: 1px solid #dfe6dc;
+  border-radius: 10px;
+  padding: 10px 11px;
+  font: inherit;
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: #2a352e;
+  background: #fbfcf9;
+  resize: vertical;
+}
+.v5-inputs textarea:focus {
+  outline: none;
+  border-color: #7ea18c;
+  background: #fff;
+}
+
+.v5-out {
+  margin-top: 12px;
+  display: grid;
+  gap: 12px;
+}
+
+/* 结论卡：一句话在最上面，先给判断再给表 */
+.v5-verdict {
+  border-radius: 12px;
+  padding: 14px 16px;
+  background: #eff2ec;
+  border-left: 4px solid #4d6b5c;
+}
+.v5-verdict.hot {
+  background: #fbeee9;
+  border-left-color: #b3402f;
+}
+.v5-verdict.warn {
+  background: #fdf5e4;
+  border-left-color: #a5761f;
+}
+.v5-verdict b {
+  display: block;
+  font-size: 17px;
+  color: #1c3d2e;
+  margin-bottom: 4px;
+}
+.v5-verdict-in {
+  margin-bottom: 12px;
+  padding: 11px 14px;
+}
+.v5-verdict-in b {
+  font-size: 14.5px;
+}
+.v5-verdict-in p {
+  font-size: 12.5px;
+}
+.v5-verdict p {
+  margin: 0;
+  font-size: 12.5px;
+  color: #4a554e;
+  line-height: 1.65;
+}
+
+/* 一页式卡片：等宽文本，可直接复制 */
+.v5-paper {
+  background: #f6f7f3;
+  border: 1px dashed #c9d3ca;
+  border-radius: 10px;
+  padding: 13px 15px;
+  font-size: 12px;
+  line-height: 1.75;
+  color: #38443c;
+  white-space: pre-wrap;
+  font-family: "SFMono-Regular", Consolas, monospace;
+  overflow-x: auto;
+  margin: 0;
+}
+
+.v5-tip {
+  margin: 10px 0 0;
+  padding: 10px 12px;
+  background: #f4f6f2;
+  border-radius: 9px;
+  font-size: 12.5px;
+  color: #5d6b5f;
+  line-height: 1.7;
+}
+
+/* 首页三痛点：沿用 v3 的 steps 语气，但每张卡带「进入 / 看示例」 */
+.v5-pains {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 12px 0 14px;
+}
+.v5-pains article {
+  border: 1px solid #e2e8de;
+  border-radius: 12px;
+  padding: 14px 14px 12px;
+  background: #fcfdfa;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.v5-pains article > b {
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  background: #375f46;
+  border-radius: 6px;
+  padding: 2px 7px;
+  align-self: flex-start;
+}
+.v5-pains article > strong {
+  font-size: 14.5px;
+  color: #1c3d2e;
+}
+.v5-pains article > p {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: #5d6b5f;
+  flex: 1;
+}
+.v5-pains .v3-actions {
+  margin-top: 4px;
+  gap: 6px;
+}
+
+/* 对照表里的段落引用 */
+.v3-src-tag {
+  display: inline-block;
+  max-width: 100%;
+  font-size: 11.5px;
+  color: #4a554e;
+  background: #f2f4ef;
+  border-radius: 6px;
+  padding: 2px 6px;
+  line-height: 1.6;
+}
+
+/* 复盘卡：沿用 v3 结构，补齐 v5 的子件 */
+.v5-review {
+  border: 1px solid #e2e8de;
+  border-radius: 12px;
+  padding: 14px 16px;
+  background: #fff;
+}
+.v5-review-top {
+  display: grid;
+  grid-template-columns: 92px 1fr 150px;
+  gap: 14px;
+  align-items: center;
+}
+.v5-score b {
+  font-size: 28px;
+  color: #1c3d2e;
+  line-height: 1;
+}
+.v5-score small {
+  display: block;
+  font-size: 11px;
+  color: #7b8a7f;
+  margin-top: 4px;
+}
+.v5-cmp > div {
+  height: 8px;
+  background: #eff2ec;
+  border-radius: 999px;
+  margin-bottom: 5px;
+  overflow: hidden;
+}
+.v5-cmp i {
+  display: block;
+  height: 100%;
+  background: #375f46;
+  border-radius: 999px;
+}
+.v5-cmp .after i {
+  background: #8fae9a;
+}
+.v5-cmp small {
+  font-size: 11px;
+  color: #7b8a7f;
+}
+.v5-grade {
+  text-align: right;
+}
+.v5-grade small {
+  display: block;
+  font-size: 11px;
+  color: #7b8a7f;
+  margin-top: 4px;
+}
+
+/* 缺口清单：编号 + 要求 + 建议 */
+.v3-gaps li {
+  align-items: start;
+}
+.v3-gaps small {
+  display: block;
+  margin-top: 2px;
+  color: #7b8a7f;
+}
+
+@media (max-width: 900px) {
+  .v5-inputs {
+    grid-template-columns: 1fr;
+  }
+  .v5-pains {
+    grid-template-columns: 1fr;
+  }
+  .v5-review-top {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .v5-grade {
+    text-align: left;
+  }
+}

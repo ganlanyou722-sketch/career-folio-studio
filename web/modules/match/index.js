@@ -119,7 +119,8 @@
     const s = f.source ?? f.file ?? "经历库";
     return typeof s === "object" ? s.name || s.title || "经历库" : s;
   }
-  const domains = [
+  /* 版本 6：领域词表直接用证据内核（含版本 2 起补的电商、内容、投放等词）；内核缺失时回落到版本 1 的 14 组。 */
+  const domains = (window.FolioEvidence && window.FolioEvidence.domains) || [
     ["用户调研", "用户研究", "用户访谈", "访谈用户"],
     ["用户反馈", "试用反馈", "反馈归纳", "整理反馈"],
     ["产品试用", "试用反馈", "试点", "组织试用"],
@@ -148,6 +149,12 @@
     const parts = domains
       .filter((set) => set.some((s) => requirement.includes(s)))
       .flat();
+    /* 版本 6：长要求按分句前 12 字兜底匹配，避免整句对不上就被判成缺证据。 */
+    const clauses = String(requirement)
+      .split(/[，,、；;：:（）()]/)
+      .map((s) => s.trim())
+      .filter((s) => s.length >= 4)
+      .map((s) => s.slice(0, 12));
     let best = null;
     for (const fact of library) {
       const quote = [
@@ -162,7 +169,8 @@
       if (!quote) continue;
       const kind = quote.includes(requirement)
         ? "direct"
-        : parts.some((p) => quote.includes(p))
+        : parts.some((p) => quote.includes(p)) ||
+            clauses.some((c) => quote.includes(c))
           ? "partial"
           : null;
       if (!kind) continue;
