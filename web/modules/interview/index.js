@@ -251,6 +251,7 @@
           ["cases", "layers", "STAR 案例"],
           ["news", "globe", "公司动向"],
           ["reverse", "mic", "面试反问"],
+          ["coach", "spark", "模拟面试"],
         ]
           .map(
             ([id, n, label]) =>
@@ -327,6 +328,15 @@
       if (tab === "cases") drawCases(section);
       if (tab === "news") drawNews(section);
       if (tab === "reverse") drawReverse(section);
+      if (tab === "coach" && window.drawCoachPanel)
+        window.drawCoachPanel(section, {
+          target,
+          snap,
+          entries: currentEntries(),
+          pack,
+          save,
+          packId,
+        });
     }
     function currentEntries() {
       const fromResume = versionEntries(snap);
