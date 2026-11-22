@@ -120,7 +120,7 @@ test("故事线：超预算给裁剪提示", () => {
 });
 
 test("客观指标：填充词率与语速", () => {
-  const m = F.objectiveMetrics("呢然后我就是说，我们做了一个事情，那个结果还不错", 10, 180);
+  const m = F.objectiveMetrics("呃然后我就是说，我们做了一个事情，那个结果还不错", 10, 180);
   assert.ok(m.fillerCount >= 4);
   assert.ok(m.fillerRate > 0.03);
   assert.ok(m.tooShort);
