@@ -8,6 +8,7 @@ const http = require("node:http");
 const fs = require("node:fs");
 const path = require("node:path");
 const engine = require("../web/shared/evidence-core.js");
+const forge = require("../web/shared/interview-forge.js");
 
 const ROOT = path.resolve(__dirname, "..", "web");
 const PORT = Number(
@@ -31,7 +32,7 @@ const routes = {
   "GET /api/health": () => ({
     ok: true,
     service: "career-folio-evidence",
-    version: 6,
+    version: 7,
     engine: "shared/evidence-core.js",
     endpoints: [
       "POST /api/risk/scan",
@@ -43,6 +44,10 @@ const routes = {
       "POST /api/ledger",
       "POST /api/radar",
       "POST /api/interview/review",
+      "POST /api/interview/questions",
+      "POST /api/interview/story",
+      "POST /api/interview/coach",
+      "POST /api/interview/script",
     ],
     rules: engine.RISK_RULES.length,
   }),
@@ -63,6 +68,16 @@ const routes = {
       materials: body.materials || [],
     }),
   "POST /api/interview/review": (body) => engine.reviewAnswer(body || {}),
+  "POST /api/interview/questions": (body) => forge.buildQuestionPack(body || {}),
+  "POST /api/interview/story": (body) => forge.compileGoldenCase(body || {}),
+  "POST /api/interview/coach": (body) =>
+    forge.scoreAnswer({
+      question: body.question || {},
+      answer: body.answer || "",
+      elapsedSec: body.elapsedSec,
+      budgetSec: body.budgetSec,
+    }),
+  "POST /api/interview/script": (body) => forge.improveScript(body || {}),
 };
 
 function send(res, code, payload, type = "application/json; charset=utf-8") {
