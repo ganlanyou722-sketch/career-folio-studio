@@ -1,13 +1,15 @@
-/**
- * 履历间 v2 · 证据服务
- * 运行：node server/index.js [--port 4399]
- * 作用：把证据引擎（与前端同一份规则）暴露成 HTTP 接口，并顺带提供静态站点。
- * 纯 Node 内置模块，无第三方依赖；部署到 GitHub Pages 时前端自动降级为本地计算。
- */
+/** Hosts the workbench and its same-origin evidence and AI endpoints. */
 const http = require("node:http");
 const fs = require("node:fs");
 const path = require("node:path");
 const engine = require("../web/shared/evidence-core.js");
+
+const HOST = process.env.HOST || "127.0.0.1";
+const publicOrigin = process.env.PUBLIC_ORIGIN?.trim();
+if (!["127.0.0.1", "::1", "localhost"].includes(HOST) &&
+    (!process.env.CV_INVITE_CODE?.trim() || !publicOrigin || !publicOrigin.startsWith("https://"))) {
+  throw new Error("对于外部部署，请设置 HTTPS PUBLIC_ORIGIN 和 CV_INVITE_CODE。");
+}
 
 const ROOT = path.resolve(__dirname, "..", "web");
 const PORT = Number(
@@ -69,26 +71,31 @@ function send(res, code, payload, type = "application/json; charset=utf-8") {
   const body = type.includes("json") ? JSON.stringify(payload) : payload;
   res.writeHead(code, {
     "content-type": type,
-    "access-control-allow-origin": "*",
-    "access-control-allow-headers": "content-type",
-    "access-control-allow-methods": "GET,POST,OPTIONS",
+    "x-content-type-options": "nosniff",
     "cache-control": "no-store",
   });
   res.end(body);
 }
 
-function readBody(req) {
+function readBody(req, maximum = 2_000_000) {
   return new Promise((resolve, reject) => {
-    let raw = "";
+    let size = 0;
+    const chunks = [];
     req.on("data", (chunk) => {
-      raw += chunk;
-      if (raw.length > 2e6) reject(new Error("body too large"));
+      size += chunk.length;
+      if (size > maximum) {
+        chunks.length = 0;
+        reject(Object.assign(new Error("提交内容过大，请缩小文件范围。"), { status: 413 }));
+      } else {
+        chunks.push(chunk);
+      }
     });
     req.on("end", () => {
+      if (size > maximum) return;
       try {
-        resolve(raw ? JSON.parse(raw) : {});
+        resolve(size ? JSON.parse(Buffer.concat(chunks).toString("utf8")) : {});
       } catch {
-        reject(new Error("invalid json"));
+        reject(Object.assign(new Error("请求格式无效。"), { status: 400 }));
       }
     });
     req.on("error", reject);
@@ -96,38 +103,79 @@ function readBody(req) {
 }
 
 function serveStatic(req, res) {
-  const urlPath = decodeURIComponent((req.url || "/").split("?")[0]);
-  const target = path.join(ROOT, urlPath === "/" ? "index.html" : urlPath);
-  if (!target.startsWith(ROOT)) return send(res, 403, { ok: false, error: "forbidden" });
+  let urlPath;
+  try { urlPath = decodeURIComponent((req.url || "/").split("?")[0]); }
+  catch { return send(res, 400, { ok: false, error: "invalid path" }); }
+  const target = path.resolve(ROOT, "." + (urlPath === "/" ? "/index.html" : urlPath));
+  if (!target.startsWith(ROOT + path.sep)) return send(res, 403, { ok: false, error: "forbidden" });
   fs.stat(target, (err, stat) => {
     if (err || !stat.isFile()) return send(res, 404, { ok: false, error: "not found" });
     res.writeHead(200, {
       "content-type": MIME[path.extname(target)] || "application/octet-stream",
       "cache-control": "no-store",
     });
-    fs.createReadStream(target).pipe(res);
+    if (req.method === "HEAD") return res.end();
+    fs.createReadStream(target).on("error", () => res.destroy()).pipe(res);
   });
+}
+
+const aiService = import("./ai.mjs").then(({createAI}) => createAI());
+let active = 0;
+
+function sameOrigin(req) {
+  if (req.headers["sec-fetch-site"] === "cross-site") return false;
+  if (publicOrigin) return req.headers.origin === publicOrigin;
+  return req.headers.origin === "http://" + req.headers.host;
+}
+
+async function serveAI(req, res, pathname) {
+  const ai = await aiService;
+  if (pathname === "/api/ai/status" && req.method === "GET") return send(res, 200, { ok: true, data: ai.status() });
+  if (req.method !== "POST" || !sameOrigin(req) || !req.headers["content-type"]?.startsWith("application/json")) {
+    return send(res, 403, { ok: false, error: "请从工作台页面发起请求。" });
+  }
+  const extract = pathname === "/api/ai/extract";
+  if (!extract && pathname !== "/api/ai/tailor") return send(res, 404, { ok: false, error: "接口不存在。" });
+  ai.authorize(req.headers["x-folio-invite"]);
+  if (active >= 3) return send(res, 429, { ok: false, error: "当前处理人数较多，请稍后重试。" });
+  active++;
+  try {
+    const body = await readBody(req, extract ? 11_200_000 : 210_000);
+    const result = await (extract ? ai.readDocument(body) : ai.tailor(body));
+    return send(res, 200, { ok: true, data: result });
+  } finally {
+    active--;
+  }
 }
 
 const server = http.createServer(async (req, res) => {
   const pathname = (req.url || "/").split("?")[0];
-  if (req.method === "OPTIONS") return send(res, 204, {});
+  if (pathname.startsWith("/api/ai/")) {
+    try { return await serveAI(req, res, pathname); }
+    catch (error) {
+      return send(res, error.status || 500, {
+        ok: false, error: error.status ? error.message : "处理材料时遇到问题，可以重试。",
+      });
+    }
+  }
+  if (pathname.startsWith("/api/")) {
+    res.setHeader("access-control-allow-origin", "*");
+    res.setHeader("access-control-allow-headers", "content-type");
+    res.setHeader("access-control-allow-methods", "GET,POST,OPTIONS");
+    if (req.method === "OPTIONS") return send(res, 204, {});
+  }
   const handler = routes[req.method + " " + pathname];
   if (handler) {
     try {
       const body = req.method === "POST" ? await readBody(req) : {};
       return send(res, 200, { ok: true, data: handler(body) });
     } catch (error) {
-      return send(res, 400, { ok: false, error: String(error.message || error) });
+      return send(res, error.status || 400, { ok: false, error: String(error.message || error) });
     }
   }
   if (pathname.startsWith("/api/")) return send(res, 404, { ok: false, error: "unknown endpoint" });
+  if (req.method !== "GET" && req.method !== "HEAD") return send(res, 405, { ok: false, error: "method not allowed" });
   serveStatic(req, res);
 });
 
-server.listen(PORT, "127.0.0.1", () => {
-  console.log("履历间 v2 证据服务已启动");
-  console.log("  站点  http://127.0.0.1:" + PORT + "/");
-  console.log("  健康  http://127.0.0.1:" + PORT + "/api/health");
-  console.log("  规则  " + engine.RISK_RULES.length + " 条风险词库 + JD/简历/面试四类分析");
-});
+server.listen(PORT, HOST, () => console.log("履历间运行于 " + HOST + ":" + PORT));

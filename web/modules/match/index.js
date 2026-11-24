@@ -731,7 +731,11 @@
       });
       host.querySelectorAll("[data-next]").forEach(
         (b) =>
-          (b.onclick = () => {
+          (b.onclick = async () => {
+            if (b.dataset.next === "resume" && (await window.FolioAI?.getStatus())?.available) {
+              if (b.isConnected) window.FolioAI.choose(job);
+              return;
+            }
             select(data.id);
             A().go(b.dataset.next);
           }),
@@ -819,6 +823,7 @@
   function openEditor(existing, incoming = [], onDone) {
     const original = existing ? JSON.parse(JSON.stringify(existing)) : draft();
     let working = JSON.parse(JSON.stringify(original));
+    const ai = window.FolioAI;
     let files = [],
       urls = [],
       queue = [],
@@ -838,9 +843,11 @@
       (existing ? "核对岗位详情" : "添加目标岗位") +
       '</h2></div><button type="button" class="match-iconbtn" data-dismiss aria-label="关闭">' +
       symbol("close") +
-      '</button></header><main><div class="match-uploader"><input type="file" accept=".txt,.md,.png,.jpg,.jpeg,.webp,image/*" multiple><span>' +
+      '</button></header><main><div class="match-uploader"><input type="file" accept=".txt,.md,.pdf,.docx,.png,.jpg,.jpeg,.webp" multiple><span>' +
       symbol("upload", 20) +
-      '<strong>拖入 JD 截图或文本文件</strong></span><small>支持多文件，也可以直接在下方粘贴原文</small></div><div class="match-filearea"></div><div class="match-errors" role="status"></div><div class="match-editrow"><label>公司名称<input name="company" placeholder="例如，青屿科技" maxlength="100" required></label><label>岗位原称<input name="role" placeholder="填写 JD 上的岗位名称" maxlength="100" required></label></div><div class="match-editrow"><label>职业方向<select name="direction">' +
+      '<strong>拖入 JD 截图、PDF、DOCX 或文本</strong></span><small>支持多文件，也可以直接在下方粘贴原文</small></div>' +
+      (ai ? ai.gate + '<label class="ai-note"><input type="checkbox" name="vision"> 用视觉模型转录 JD 截图</label>' : '') +
+      '<div class="match-filearea"></div><div class="match-errors" role="status"></div><div class="match-editrow"><label>公司名称<input name="company" placeholder="例如，青屿科技" maxlength="100" required></label><label>岗位原称<input name="role" placeholder="填写 JD 上的岗位名称" maxlength="100" required></label></div><div class="match-editrow"><label>职业方向<select name="direction">' +
       directions.map((d) => "<option>" + d + "</option>").join("") +
       '</select></label><label>所属行业<input name="industry" placeholder="例如，人工智能"></label></div><label>岗位原文<textarea name="text" rows="4" placeholder="粘贴岗位职责、任职要求等原文" required></textarea></label><div class="match-editrow"><label>明确必需条件<textarea name="requirements" rows="3" placeholder="每行一项，来源于岗位原文"></textarea></label><label>加分条件<textarea name="bonus" rows="3" placeholder="每行一项，可选填"></textarea></label></div><fieldset class="match-prefs"><legend>我的意向</legend>' +
       ["", ...prefs]
@@ -853,7 +860,7 @@
             "</span></label>",
         )
         .join("") +
-      '</fieldset><div class="match-manual"></div><div class="match-history"></div></main><footer><span class="match-meta" data-footer>保存后加入岗位牌组</span><button class="match-btn" type="button" data-dismiss>取消</button><button class="match-btn match-dark" type="submit">保存岗位</button></footer></form>';
+      '</fieldset><div class="match-manual"></div><div class="match-history"></div></main><footer><span class="match-meta" data-footer>保存后加入岗位牌组</span><button class="match-btn" type="button" data-dismiss>取消</button><button class="match-btn match-dark" type="submit">保存岗位</button>' + (ai ? '<button class="match-btn" type="submit" data-ai-resume>据此去优化简历</button>' : '') + '</footer></form>';
     document.body.append(dialog);
     const form = dialog.querySelector("form"),
       f = (name) => form.elements.namedItem(name);
@@ -861,6 +868,8 @@
       err = form.querySelector(".match-errors"),
       uploader = form.querySelector(".match-uploader");
     const close = () => dialog.close();
+    const submitButtons = [...form.querySelectorAll("[type=submit]")];
+    ai?.getStatus().then(info => ai.bindGate(form, info));
     if (existing) {
       const remove = document.createElement("button");
       remove.type = "button";
@@ -1084,8 +1093,8 @@
           s = s.slice(m[0].length);
         }
         if (s) {
-          if (mode === "req") req.push(s);
-          if (mode === "bonus") bonus.push(s);
+          if (mode === "bonus" || /优先|加分/.test(s)) bonus.push(s);
+          else if (mode === "req" || /至少|必须|不少于/.test(s)) req.push(s);
         }
       });
       j.requirements = req;
@@ -1107,19 +1116,19 @@
       processing = true;
       stash();
       err.textContent = "正在读取文件…";
-      form.querySelector('[type="submit"]').disabled = true;
+      submitButtons.forEach(button => { button.disabled = true; });
       const issues = [];
       for (const file of list) {
         if (!file.size) {
           issues.push(file.name + " 为空文件");
           continue;
         }
-        if (file.size > 30 * 1024 * 1024) {
-          issues.push(file.name + " 超过 30 MB");
+        if (file.size > 8 * 1024 * 1024) {
+          issues.push(file.name + " 超过 8 MB");
           continue;
         }
         if (
-          !/\.(?:md|txt|png|jpe?g|webp)$/i.test(file.name) &&
+          !/\.(?:md|txt|pdf|docx|png|jpe?g|webp)$/i.test(file.name) &&
           !file.type.startsWith("image/")
         ) {
           issues.push(file.name + " 的格式不受支持");
@@ -1148,9 +1157,12 @@
                 }
               } catch {}
             }
+            if (!text && ai && f("vision")?.checked) {
+              try { text = await ai.readFile(file, form); } catch (error) { issues.push(error.message); }
+            }
             if (!text) issues.push("可对照截图填写原文和要求");
           } else {
-            text = await file.text();
+            text = ai ? await ai.readFile(file, form) : await file.text();
           }
           const j = parseText(text, file.name);
           const attachment = {
@@ -1171,8 +1183,8 @@
             bonus: [...new Set([...merged.bonus, ...j.bonus])],
             text: [merged.text, j.text].filter(Boolean).join("\n\n"),
           };
-        } catch {
-          issues.push("无法读取 " + file.name);
+        } catch (error) {
+          issues.push("无法读取 " + file.name + " · " + error.message);
         }
       }
       if (!dialog.isConnected) return;
@@ -1180,7 +1192,7 @@
       showFiles();
       err.textContent = [...new Set(issues)].join("；");
       processing = false;
-      form.querySelector('[type="submit"]').disabled = false;
+      submitButtons.forEach(button => { button.disabled = false; });
     }
     uploader.querySelector("input").onchange = (e) => {
       ingest([...e.target.files]);
@@ -1199,6 +1211,8 @@
     form.onsubmit = async (e) => {
       e.preventDefault();
       if (processing) return;
+      const optimize = e.submitter?.hasAttribute("data-ai-resume");
+      if (optimize && splitJobs) { err.textContent = "请先分别保存岗位，再选择其中一张牌发起优化。"; return; }
       stash();
       const records = splitJobs ? queue : [merged],
         invalid = records.findIndex((j) => !j.company || !j.role || !j.text);
@@ -1222,8 +1236,8 @@
         return;
       }
       processing = true;
-      const submit = form.querySelector('[type="submit"]');
-      submit.disabled = true;
+      const submit = e.submitter || submitButtons[0], submitLabel = submit.textContent;
+      submitButtons.forEach(button => { button.disabled = true; });
       submit.textContent = "保存中…";
       try {
         for (const attachment of files)
@@ -1261,6 +1275,7 @@
         if (A().set("jds", next) === false) throw new Error("保存失败");
         close();
         onDone(updates[0]);
+        if (optimize) ai.choose(updates[0]);
         A().toast(
           existing ? "已保存岗位修订" : "已加入 " + updates.length + " 个岗位",
         );
@@ -1268,8 +1283,8 @@
         err.textContent = "当前浏览器无法保存资料，请检查本地存储空间后重试。";
       } finally {
         processing = false;
-        submit.disabled = false;
-        submit.textContent = "保存岗位";
+        submitButtons.forEach(button => { button.disabled = false; });
+        submit.textContent = submitLabel;
       }
     };
     fill(working);

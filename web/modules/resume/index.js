@@ -190,23 +190,46 @@
     );
   }
   function persist(d) {
-    const drafts = get("resumeDrafts", {});
-    drafts[targetKey(d.target)] = d;
-    return (
-      set("resumeDrafts", drafts) !== false && set("resumeDraft", d) !== false
-    );
+    const group = d.tailoredFrom ? "resumeTailoredDrafts" : "resumeDrafts";
+    const drafts = get(group, {});
+    drafts[d.tailoredFrom ? d.id : targetKey(d.target)] = d;
+    return set(group, drafts) !== false && set("resumeDraft", d) !== false;
   }
+  window.saveTailoredResume = (source, target, edits, skillRevision) => {
+    const draft = clone(source);
+    const byId = new Map(edits.map(edit => [edit.id, edit]));
+    draft.blocks = draft.blocks.map(block => {
+      const edit = byId.get(block.id);
+      return block.type === "body" && edit?.original === block.text ? { ...block, text: edit.text } : block;
+    });
+    delete draft.draftId;
+    delete draft.actions;
+    delete draft.at;
+    Object.assign(draft, {
+      id: uid(), revision: 1, updatedAt: Date.now(), sample: false,
+      title: targetName(target) + " · 岗位简历", target: clone(target),
+      tailoredFrom: { id: source.draftId || source.id, revision: source.revision, skillRevision },
+    });
+    const previous = get("target", null);
+    if (set("target", target) === false) return false;
+    if (persist(draft)) return true;
+    set("target", previous);
+    return false;
+  };
   function currentDraft() {
     const target = get("target", null) || get("direction", null) || {};
     const current = get("resumeDraft", null);
     if (current && targetKey(current.target) === targetKey(target))
       return current;
-    const stored = get("resumeDrafts", {})[targetKey(target)];
+    const stored = get("resumeDrafts", {})[targetKey(target)] ||
+      Object.values(get("resumeTailoredDrafts", {}))
+        .filter(doc => targetKey(doc.target) === targetKey(target))
+        .sort((a, b) => b.updatedAt - a.updatedAt)[0];
     if (stored) {
       persist(stored);
       return stored;
     }
-    const d = current
+    const d = current && !current.tailoredFrom
       ? {
           ...clone(current),
           id: uid(),
@@ -330,48 +353,61 @@
     return set("resumeVersions", versions) === false ? null : v;
   }
   function modalImport(apply) {
+    const ai = window.FolioAI;
     modal(
       "导入原简历",
-      '<p>粘贴原文，或选择一份 TXT 文件。导入后可以逐段核对与编辑。</p><label class="re-label">简历原文<textarea rows="9" placeholder="第一行填写姓名，接着粘贴联系方式、教育背景和项目经历…"></textarea></label><div class="re-actions"><label class="re-btn">' +
-        ico("upload") +
-        '读取 TXT<input type="file" accept=".txt,text/plain" hidden></label>' +
-        btn("import", "创建可编辑底稿", "check", "re-primary") +
-        "</div>",
+      '<p>选择 PDF、DOCX、TXT 或简历截图。导入后请核对文字和分段，工作台会创建可编辑底稿。</p>' +
+      '<p class="ai-note">文档由工作台提取文字。扫描页和截图会交由配置的视觉模型转录。</p>' +
+      (ai?.gate || "") +
+      '<label class="re-label">简历原文<textarea rows="9" maxlength="18000" placeholder="也可直接粘贴简历原文"></textarea></label>' +
+      (ai?.statusLine || "") + '<div class="re-actions"><label class="re-btn">' + ico("upload") +
+      '选择文件<input type="file" accept=".pdf,.docx,.txt,.png,.jpg,.jpeg,.webp" hidden></label>' +
+        btn("import", "确认文字并创建底稿", "check", "re-primary") + "</div>",
       (m, close) => {
-        const input = m.querySelector("textarea");
-        m.querySelector("[type=file]").onchange = async (e) => {
-          const f = e.target.files[0];
-          if (!f) return;
-          if (f.size > 2e6) {
-            toast("请选择 2 MB 以内的文本文件");
-            return;
-          }
+        const input = m.querySelector("textarea"), submit = m.querySelector("[data-action]");
+        const fileInput = m.querySelector("[type=file]"), status = m.querySelector(".ai-status");
+        ai?.getStatus().then(info => ai.bindGate(m, info));
+        fileInput.onchange = async () => {
+          const file = fileInput.files[0];
+          fileInput.value = "";
+          if (!file) return;
+          const before = input.value;
+          submit.disabled = fileInput.disabled = true;
+          if (status) status.textContent = "正在提取原文…";
           try {
-            input.value = await f.text();
-          } catch {
-            toast("文件读取失败，可以粘贴原文");
+            const raw = ai ? await ai.readFile(file, m) : await file.text();
+            if (raw.length > 18000) throw new Error("正文超过 18,000 字符，请缩小范围再导入。");
+            if (!raw.trim()) throw new Error("这份文件没有可读取的文字。");
+            if (input.value !== before) throw new Error("原文已在读取期间改动，已保留你的输入。");
+            input.value = raw;
+            if (status) status.textContent = "原文已提取，请检查分段、列顺序和数字。";
+          } catch (error) {
+            if (status) status.textContent = error.message;
+            else toast(error.message);
+          } finally {
+            submit.disabled = fileInput.disabled = false;
           }
         };
-        m.querySelector("[data-action]").onclick = () => {
-          const lines = input.value
-            .split(/\r?\n/)
-            .map((s) => s.trim())
-            .filter(Boolean);
+        submit.onclick = () => {
+          const lines = input.value.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
           if (!lines.length) return input.focus();
           const blocks = lines.flatMap((s, n) => {
-            if (n === 0 && s.length < 24) return [block("name", s)];
-            if (
-              /^(教育背景|个人经历|工作经历|实习经历|项目经历|技能|个人优势|校园经历|专业技能|教育经历)[：:]?$/.test(
-                s,
-              )
-            )
+            if (/^(教育背景|个人经历|工作经历|实习经历|项目经历|技能|个人优势|校园经历|专业技能|教育经历|荣誉奖项)[：:]?$/.test(s))
               return [block("section", s.replace(/[：:]$/, ""))];
-            return (s.match(/[\s\S]{1,480}/g) || []).map((t) =>
-              block(n === 1 && s.length < 75 ? "contact" : "body", t),
-            );
+            if (/([^\s@]+@[^\s@]+\.[A-Za-z]{2,}|(?:^|\D)1[3-9]\d{9}(?:$|\D)|^(?:联系电话|手机|邮箱|微信|个人信息)[：:])/.test(s))
+              return [block("contact", s)];
+            if (n === 0 && /^[\p{L}·\s]{2,16}$/u.test(s)) return [block("name", s)];
+            return (s.match(/[\s\S]{1,480}/g) || []).map(t => block("body", t));
           });
           apply(blocks);
           close();
+          const after = get("resumeAfterImport", null);
+          if (after) {
+            set("resumeAfterImport", null);
+            const job = window.MatchData.jobs().find(j => j.id === after.id && j.revision === after.revision);
+            if (job) ai?.choose(job);
+            else toast("岗位已更新，可返回匹配台选择最新岗位。");
+          }
         };
       },
     );
@@ -453,6 +489,7 @@
     )?.revision;
     root.innerHTML =
       '<section class="re-view"><div class="re-titlebar"><div><h1>简历优化台</h1><p>把真实经历打磨成一份可以投递的简历。</p></div><div class="re-header-actions">' +
+      (window.FolioAI ? btn("tailor", "AI 定向改写", "spark") : "") +
       btn("versions", "简历仓库", "archive") +
       btn("final", "定稿", "seal", "re-primary") +
       '</div></div><div class="re-documentbar"><div class="re-doc-icon">' +
@@ -846,6 +883,15 @@
         case "import":
           modalImport(startOver);
           break;
+        case "tailor": {
+          const job = window.MatchData.jobs().find(j => j.id === d.target?.id);
+          if (job) window.FolioAI.choose(job);
+          else {
+            toast("先添加或打开目标 JD，再点击「据此去优化简历」");
+            A().go("match");
+          }
+          break;
+        }
         case "facts":
           pickFacts(d, startOver);
           break;

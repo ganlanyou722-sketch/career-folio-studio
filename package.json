@@ -6,6 +6,14 @@
   "scripts": {
     "skills:list": "node tools/skills.mjs list",
     "skills:check": "node tools/skills.mjs check",
-    "test": "node --test tools/skills.test.mjs"
+    "test": "node --test tools/skills.test.mjs server/ai.test.mjs",
+    "start": "node --env-file-if-exists=.env server/index.js"
+  },
+  "engines": {
+    "node": ">=22.15.0"
+  },
+  "dependencies": {
+    "mammoth": "1.13.0",
+    "pdf-parse": "2.4.5"
   }
 }
