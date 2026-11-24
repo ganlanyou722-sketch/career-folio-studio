@@ -101,7 +101,7 @@ curl -s -X POST http://127.0.0.1:4399/api/risk/scan -H "content-type: applicatio
 
 ## 协作时怎样换 skill
 
-每项技能独占一个目录。仓库已包含 [chinese-product-manager-cv](skills/resume/chinese-product-manager-cv/SKILL.md)，其余三个插槽可直接放入新包。
+每项技能独占一个目录。2026-11-24 更新收录了经历事实归档、岗位证据匹配、简历内容优化和中文产品经理简历排版四套规则。面试打磨台可使用匹配结果中的交接数据，独立的面试 skill 仍预留。各包的适用范围和验收样例见[更新说明与接入验收](00-更新说明与接入验收.md)。
 
 - **调整已有方法**可修改包内的 `SKILL.md` 和配套资源。保留模块及 frontmatter 中的 `name`，现有调用方下次读取时就能拿到新内容。
 - **增加平行方案**可在同一个模块下新建另一个包，例如 `skills/resume/finance-analyst-cv/SKILL.md`。为它设置独立的 `name`，两种方法可以共存。

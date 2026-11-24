@@ -1,0 +1,1802 @@
+{
+  "collection_date": "2026-11-23",
+  "scope": "公开中文实习、校招及初级岗位，含历史JD。经10组检索，从公开索引中按可辨识的雇主、岗位和职责筛选，同岗转载保留一条。只编码可见且有上下文的短语，不存整篇JD。每个岗位选取代表性短语，命中数不是全文词频。",
+  "sources": [
+    {
+      "id": "JD01",
+      "track": "产品经理",
+      "branch": "AI产品",
+      "role": "百度·AI 产品经理 J103757",
+      "url": "https://talent.baidu.com/jobs/detail/INTERN/0ad545f8-07df-42f1-9a10-28e79d5dc407",
+      "terms": [
+        "需求分析",
+        "PRD",
+        "Agent",
+        "Workflow",
+        "日志",
+        "Bad Case"
+      ]
+    },
+    {
+      "id": "JD02",
+      "track": "产品经理",
+      "branch": "AI产品",
+      "role": "百度·AI 搜索产品 J106944",
+      "url": "https://talent.baidu.com/jobs/detail/INTERN/c5e698fd-dab6-4242-a570-03657c21ffb6",
+      "terms": [
+        "评测标准",
+        "召回排序",
+        "多模态搜索",
+        "RAG",
+        "能力边界"
+      ]
+    },
+    {
+      "id": "JD03",
+      "track": "产品经理",
+      "branch": "AI产品",
+      "role": "百度·Coding 大模型产品 J107028",
+      "url": "https://talent.baidu.com/jobs/detail/INTERN/4fd98d95-6bda-4a1b-8562-8d0f4d671bb0",
+      "terms": [
+        "需求排序",
+        "能力诊断",
+        "评测集",
+        "工具调用",
+        "评测成本"
+      ]
+    },
+    {
+      "id": "JD04",
+      "track": "产品经理",
+      "branch": "AI产品",
+      "role": "百度·任务型 AI 产品实习",
+      "url": "https://talent.baidu.com/jobs/detail/INTERN/2a30a008-be18-46bc-b6d5-9dedac0bfa25",
+      "terms": [
+        "意图识别",
+        "原型",
+        "执行成功",
+        "准时送达",
+        "需求文档"
+      ]
+    },
+    {
+      "id": "JD05",
+      "track": "产品经理",
+      "branch": "AI产品",
+      "role": "酷家乐·B端 AI 产品经理",
+      "url": "https://www.kujiale.com/pub/hr-recruit/campus/postdetail/cf3039dd-b88a-4da2-ab32-e1874d413959",
+      "terms": [
+        "用户调研",
+        "业务流程",
+        "原型图",
+        "效果测试",
+        "商业化路径"
+      ]
+    },
+    {
+      "id": "JD06",
+      "track": "产品经理",
+      "branch": "通用产品",
+      "role": "得物·交易售后产品实习",
+      "url": "https://www.shixiseng.com/intern/inn_0usyblppwqr8?pcm=pc_SearchList",
+      "terms": [
+        "竞品分析",
+        "需求分析",
+        "PRD",
+        "效果复盘",
+        "项目管理"
+      ]
+    },
+    {
+      "id": "JD07",
+      "track": "产品经理",
+      "branch": "通用产品",
+      "role": "得物·用户策略产品实习",
+      "url": "https://www.shixiseng.com/intern/inn_lv1rtih1tenn?pcm=pc_SearchList",
+      "terms": [
+        "互动玩法",
+        "竞品研究",
+        "需求拆解",
+        "数据分析"
+      ]
+    },
+    {
+      "id": "JD08",
+      "track": "产品经理",
+      "branch": "通用产品",
+      "role": "字节跳动·豆包用户研究实习",
+      "url": "https://www.shixiseng.com/intern/inn_awn7wo8fnmvy?pcm=pc_SearchList",
+      "terms": [
+        "深度访谈",
+        "焦点小组",
+        "问卷调研",
+        "原型测试",
+        "满意度"
+      ]
+    },
+    {
+      "id": "JD09",
+      "track": "产品经理",
+      "branch": "通用产品",
+      "role": "小米·体验产品经理实习",
+      "url": "https://xiaomi.jobs.f.mioffice.cn/internship/position/7601099261011085610/detail",
+      "terms": [
+        "用户反馈",
+        "体验洞察",
+        "交互原型",
+        "可用性测试"
+      ]
+    },
+    {
+      "id": "JD10",
+      "track": "产品经理",
+      "branch": "通用产品",
+      "role": "深势科技·产品实习",
+      "url": "https://dptechnology.jobs.feishu.cn/index/position/7611105993640741170/detail",
+      "terms": [
+        "用户调研",
+        "需求文档",
+        "产品复盘",
+        "Figma"
+      ]
+    },
+    {
+      "id": "JD11",
+      "track": "产品经理",
+      "branch": "企业产品",
+      "role": "阿里巴巴·B端产品经理实习",
+      "url": "https://jobs.ultraai.site/jobs/alibaba_campus/internship%3A199907980009",
+      "terms": [
+        "业务流程",
+        "用户反馈",
+        "数据分析"
+      ]
+    },
+    {
+      "id": "JD12",
+      "track": "产品经理",
+      "branch": "企业产品",
+      "role": "贝壳·支付方向B端产品经理",
+      "url": "https://www.nowcoder.com/jobs/hr/627?jobId=469631&page=1&page=2&pageSource=5011",
+      "terms": [
+        "问题拆解",
+        "流程规范",
+        "验证策略效果"
+      ]
+    },
+    {
+      "id": "JD13",
+      "track": "产品经理",
+      "branch": "企业产品",
+      "role": "顺丰科技·B端产品实习",
+      "url": "https://www.nowcoder.com/discuss/353159283892232192",
+      "terms": [
+        "现场踏查",
+        "业务访谈",
+        "客户痛点"
+      ]
+    },
+    {
+      "id": "JD14",
+      "track": "产品经理",
+      "branch": "增长产品",
+      "role": "小红书·C端用户增长产品实习",
+      "url": "https://jinliqiuzhi.com/jobs/1032844",
+      "terms": [
+        "漏斗分析",
+        "登录率",
+        "购买率",
+        "方案设计"
+      ]
+    },
+    {
+      "id": "JD15",
+      "track": "产品经理",
+      "branch": "增长产品",
+      "role": "哈啰·用户增长产品经理实习",
+      "url": "https://www.shixiseng.com/intern/inn_xt2ruzjvqqij?pcm=pc_SearchList",
+      "terms": [
+        "增长实验",
+        "活跃",
+        "留存",
+        "行为路径"
+      ]
+    },
+    {
+      "id": "JD16",
+      "track": "产品经理",
+      "branch": "增长产品",
+      "role": "快手·消息触达增长策略产品实习",
+      "url": "https://www.shixiseng.com/intern/inn_sunhgbu3xwud",
+      "terms": [
+        "指标归因",
+        "实验设计",
+        "SQL",
+        "指标异动"
+      ]
+    },
+    {
+      "id": "JD17",
+      "track": "产品经理",
+      "branch": "增长产品",
+      "role": "字节跳动·归因产品实习",
+      "url": "https://www.shixiseng.com/intern/inn_73gepqmqochf?pcm=pc_SearchList",
+      "terms": [
+        "归因策略",
+        "转化跟踪",
+        "埋点",
+        "归因准确度"
+      ]
+    },
+    {
+      "id": "JD18",
+      "track": "产品经理",
+      "branch": "增长产品",
+      "role": "字节跳动·飞书海外增长产品实习",
+      "url": "https://www.shixiseng.com/intern/inn_tu9ulxjpt3ve?pcm=pc_SearchList",
+      "terms": [
+        "验收测试",
+        "用户行为",
+        "落地页转化率"
+      ]
+    },
+    {
+      "id": "JD19",
+      "track": "运营",
+      "branch": "AI运营",
+      "role": "美团·AI产品运营实习",
+      "url": "https://zhaopin.meituan.com/web/position/detail?highlightType=campus&jobUnionId=3723476783",
+      "terms": [
+        "提示词",
+        "自动化评测",
+        "模型迭代"
+      ]
+    },
+    {
+      "id": "JD20",
+      "track": "运营",
+      "branch": "AI运营",
+      "role": "阿里国际·AI产品运营实习",
+      "url": "https://www.nowcoder.com/jobs/detail/419126",
+      "terms": [
+        "竞品对标",
+        "客户访谈",
+        "解决方案评估"
+      ]
+    },
+    {
+      "id": "JD21",
+      "track": "运营",
+      "branch": "AI运营",
+      "role": "八豆智能·AI招聘产品运营实习",
+      "url": "https://www.nowcoder.com/jobs/detail/458934",
+      "terms": [
+        "描述问题",
+        "数据分析",
+        "Excel"
+      ]
+    },
+    {
+      "id": "JD22",
+      "track": "运营",
+      "branch": "AI运营",
+      "role": "美团·AI语音产品运营实习",
+      "url": "https://www.nowcoder.com/jobs/detail/163209",
+      "terms": [
+        "拉新推广",
+        "使用反馈",
+        "产品迭代"
+      ]
+    },
+    {
+      "id": "JD23",
+      "track": "运营",
+      "branch": "AI运营",
+      "role": "元狲·AI产品运营实习",
+      "url": "https://www.shixiseng.com/intern/inn_g59qcribmaqa?pcm=pc_SearchList",
+      "terms": [
+        "选题",
+        "使用步骤",
+        "评论"
+      ]
+    },
+    {
+      "id": "JD24",
+      "track": "运营",
+      "branch": "渠道运营",
+      "role": "众安科技·渠道运营实习",
+      "url": "https://www.shixiseng.com/intern/inn_rinwwfmcx1c8?pcm=pc_SearchList",
+      "terms": [
+        "用户分层",
+        "用户留存",
+        "商务对接",
+        "合同落地"
+      ]
+    },
+    {
+      "id": "JD25",
+      "track": "运营",
+      "branch": "渠道运营",
+      "role": "携程·渠道投放运营实习",
+      "url": "https://www.shixiseng.com/intern/inn_tivdifl3hgxz?pcm=pc_SearchList",
+      "terms": [
+        "项目排期",
+        "素材审核",
+        "渠道报表"
+      ]
+    },
+    {
+      "id": "JD26",
+      "track": "运营",
+      "branch": "渠道运营",
+      "role": "智联招聘·渠道运营与数据分析实习",
+      "url": "https://www.zhaopin.com/jobdetail/CCL1501502560J40859778714.htm",
+      "terms": [
+        "转化漏斗",
+        "线索质量",
+        "ROI",
+        "分销商"
+      ]
+    },
+    {
+      "id": "JD27",
+      "track": "运营",
+      "branch": "渠道运营",
+      "role": "美团·营销渠道运营实习",
+      "url": "https://www.shixiseng.com/intern/inn_2edgurlfiep6",
+      "terms": [
+        "差异化运营",
+        "渠道合作",
+        "运营分析报告",
+        "入驻"
+      ]
+    },
+    {
+      "id": "JD28",
+      "track": "运营",
+      "branch": "媒体运营",
+      "role": "光华创想·小红书内容运营实习",
+      "url": "https://www.shixiseng.com/intern/inn_gu1cpoz7py1k?pcm=pc_SearchList",
+      "terms": [
+        "选题库",
+        "曝光",
+        "互动率",
+        "涨粉",
+        "进店转化"
+      ]
+    },
+    {
+      "id": "JD29",
+      "track": "运营",
+      "branch": "媒体运营",
+      "role": "扇贝·新媒体运营实习",
+      "url": "https://www.shixiseng.com/intern/inn_jnkh5hvzlt7v?pcm=pc_SearchList",
+      "terms": [
+        "账号搭建",
+        "视频剪辑",
+        "内容策划",
+        "提示词"
+      ]
+    },
+    {
+      "id": "JD30",
+      "track": "运营",
+      "branch": "媒体运营",
+      "role": "昆仑万维·新媒体运营实习",
+      "url": "https://www.nowcoder.com/jobs/detail/265776?channel=newCompanyPage&pageSource=5012",
+      "terms": [
+        "素材搜集",
+        "内容策划",
+        "文案撰写",
+        "数据复盘"
+      ]
+    },
+    {
+      "id": "JD31",
+      "track": "运营",
+      "branch": "媒体运营",
+      "role": "华大基因·新媒体运营实习",
+      "url": "https://www.shixiseng.com/intern/inn_zeqjvgbbqhrs?pcm=pc_SearchList",
+      "terms": [
+        "品牌内容策划",
+        "脚本撰写",
+        "产品卖点",
+        "曝光"
+      ]
+    },
+    {
+      "id": "JD32",
+      "track": "运营",
+      "branch": "用户运营",
+      "role": "蔚来·用户运营实习",
+      "url": "https://nio.jobs.feishu.cn/index/position/7686035110076680475/detail",
+      "terms": [
+        "用户画像",
+        "用户分层",
+        "留存率",
+        "复购率",
+        "转化率"
+      ]
+    },
+    {
+      "id": "JD33",
+      "track": "运营",
+      "branch": "用户运营",
+      "role": "网易·用户运营实习",
+      "url": "https://www.shixiseng.com/intern/inn_fzjxuilp1vhh?pcm=pc_SearchList",
+      "terms": [
+        "活动参与量",
+        "投稿量",
+        "作者留存",
+        "流失预警"
+      ]
+    },
+    {
+      "id": "JD34",
+      "track": "运营",
+      "branch": "用户运营",
+      "role": "美团·用户运营实习",
+      "url": "https://www.zhaopin.com/jobdetail/CC383625320J40874831009.htm",
+      "terms": [
+        "DAU",
+        "异常归因",
+        "用户分群",
+        "渠道质量评估"
+      ]
+    },
+    {
+      "id": "JD35",
+      "track": "运营",
+      "branch": "用户运营",
+      "role": "携程·海外火车票用户运营实习",
+      "url": "https://www.shixiseng.com/intern/inn_dhhob3g4pswe?pcm=pc_SearchList",
+      "terms": [
+        "私域转化",
+        "订阅数量",
+        "用户活跃度"
+      ]
+    },
+    {
+      "id": "JD36",
+      "track": "运营",
+      "branch": "用户运营",
+      "role": "哈啰·用户运营实习",
+      "url": "https://cn.linkedin.com/jobs/view/%E7%94%A8%E6%88%B7%E8%BF%90%E8%90%A5%E5%AE%9E%E4%B9%A0%E7%94%9F-27-%E5%B1%8A%E5%AE%9E%E4%B9%A0-at-hellobike-4469503890",
+      "terms": [
+        "用户触达",
+        "活动复盘",
+        "生命周期"
+      ]
+    },
+    {
+      "id": "JD37",
+      "track": "金融",
+      "branch": "行研投研",
+      "role": "苏新基金·权益助理研究员",
+      "url": "https://www.susingfund.com/upload/pdf/1778045737213-%E8%8B%8F%E6%96%B0%E5%9F%BA%E9%87%912026%E5%B9%B4%E5%BA%A6%E5%AE%9E%E4%B9%A0%E7%94%9F%E6%8B%9B%E5%8B%9F%E5%90%AF%E4%BA%8B.pdf",
+      "terms": [
+        "估值模型",
+        "深度研究报告",
+        "课题答辩"
+      ]
+    },
+    {
+      "id": "JD38",
+      "track": "金融",
+      "branch": "行研投研",
+      "role": "嘉合基金·权益研究部行业研究实习",
+      "url": "https://aeo.uibe.edu.cn/front/zwxx.jspa?xqzwId=42623&zpxxId=128061",
+      "terms": [
+        "盈利预测模型",
+        "产业链",
+        "定价模型"
+      ]
+    },
+    {
+      "id": "JD39",
+      "track": "金融",
+      "branch": "行研投研",
+      "role": "国新基金·行业研究岗",
+      "url": "https://career.cuhk.edu.cn/attachment/careercuhk/ueditor/file/20240529/8413_%E5%9B%BD%E6%96%B0%E5%9F%BA%E9%87%91%E5%AE%9E%E4%B9%A0%E8%81%8C%E4%BD%8D%E4%BB%8B%E7%BB%8D-%E8%A1%8C%E7%A0%94%E5%B2%97%EF%BC%88%E6%97%A5%E5%B8%B8%E5%AE%9E%E4%B9%A0%EF%BC%89240529.pdf",
+      "terms": [
+        "产业链调研",
+        "尽职调查",
+        "会议纪要",
+        "投资价值分析报告"
+      ]
+    },
+    {
+      "id": "JD40",
+      "track": "金融",
+      "branch": "行研投研",
+      "role": "凯丰投资·大类资产行业研究实习",
+      "url": "https://career.nankai.edu.cn/correcruit/content/id/120125.html",
+      "terms": [
+        "核心驱动因素",
+        "产业链",
+        "投资建议"
+      ]
+    },
+    {
+      "id": "JD41",
+      "track": "金融",
+      "branch": "行研投研",
+      "role": "长城基金·行业研究员",
+      "url": "https://career.cuhk.edu.cn/attachment/careercuhk/ueditor/file/20260514/8522_35_15_%E9%95%BF%E5%9F%8E%E5%9F%BA%E9%87%912027%E5%B1%8A%E6%A0%A1%E5%9B%AD%E6%8B%9B%E8%81%98%E5%B2%97%E4%BD%8D%E8%AF%A6%E6%83%85.pdf",
+      "terms": [
+        "实地调研",
+        "财务分析",
+        "估值建模",
+        "投资路演"
+      ]
+    },
+    {
+      "id": "JD42",
+      "track": "金融",
+      "branch": "行研投研",
+      "role": "合丰资本·行业研究实习",
+      "url": "https://career.cuhk.edu.cn/attachment/careercuhk/ueditor/file/20240517/1671_%E5%90%88%E4%B8%B0%E8%B5%84%E6%9C%AC2024%E5%B9%B4%E8%A1%8C%E4%B8%9A%E7%A0%94%E7%A9%B6%E5%AE%9E%E4%B9%A0%E7%94%9F%E6%8B%9B%E8%81%98%20240516.pdf",
+      "terms": [
+        "重点行业",
+        "个股",
+        "研究资料",
+        "内容反馈"
+      ]
+    },
+    {
+      "id": "JD43",
+      "track": "金融",
+      "branch": "行研投研",
+      "role": "万家基金·研究助理",
+      "url": "https://career.cuhk.edu.cn/attachment/careercuhk/ueditor/file/20251027/5663_%E4%B8%87%E5%AE%B6%E5%9F%BA%E9%87%912026%E5%B1%8A%E6%A0%A1%E5%9B%AD%E6%8B%9B%E8%81%98%E9%9C%80%E6%B1%82%20251027.pdf",
+      "terms": [
+        "基本面分析",
+        "估值模型",
+        "研究报告"
+      ]
+    },
+    {
+      "id": "JD44",
+      "track": "金融",
+      "branch": "审计",
+      "role": "上会·审计助理",
+      "url": "https://www.gdicpa.org.cn/gzfw/zppt/zxzx1/content_20239",
+      "terms": [
+        "审计工作底稿",
+        "抽查凭证",
+        "存货监盘",
+        "核对"
+      ]
+    },
+    {
+      "id": "JD45",
+      "track": "金融",
+      "branch": "审计",
+      "role": "北京兴华·审计实习",
+      "url": "https://www.xhcpas.com/pages/xyzp/",
+      "terms": [
+        "审计业务",
+        "工作底稿"
+      ]
+    },
+    {
+      "id": "JD46",
+      "track": "金融",
+      "branch": "审计",
+      "role": "中勤万信天津·审计助理",
+      "url": "https://www.zh-cpa.com/nd.jsp?fromColId=116&id=199",
+      "terms": [
+        "函证",
+        "抽凭",
+        "盘点",
+        "整理底稿"
+      ]
+    },
+    {
+      "id": "JD47",
+      "track": "金融",
+      "branch": "审计",
+      "role": "重庆通冠·审计助理实习",
+      "url": "https://kj.swufe.edu.cn/__local/E/33/63/70A3D128A66B9DEB510EB6BBCA4_431F7EC8_A603D.pdf",
+      "terms": [
+        "项目资料",
+        "底稿",
+        "档案"
+      ]
+    },
+    {
+      "id": "JD48",
+      "track": "金融",
+      "branch": "审计",
+      "role": "中汇·审计助理实习",
+      "url": "https://cn.linkedin.com/jobs/view/%E5%AE%A1%E8%AE%A1%E5%8A%A9%E7%90%86%E5%AE%9E%E4%B9%A0%E7%94%9Fj11014-at-%E4%B8%AD%E6%B1%87%E4%BC%9A%E8%AE%A1%E5%B8%88%E4%BA%8B%E5%8A%A1%E6%89%80%EF%BC%88%E7%89%B9%E6%AE%8A%E6%99%AE%E9%80%9A%E5%90%88%E4%BC%99%EF%BC%89-4469669261",
+      "terms": [
+        "审计程序",
+        "审计证据",
+        "工作底稿",
+        "归档"
+      ]
+    },
+    {
+      "id": "JD49",
+      "track": "金融",
+      "branch": "审计",
+      "role": "深圳旭泰·审计助理",
+      "url": "https://www.zhaopin.com/jobdetail/CC461567420J40907555215.htm",
+      "terms": [
+        "盘点",
+        "函证",
+        "整理",
+        "归档"
+      ]
+    },
+    {
+      "id": "JD50",
+      "track": "金融",
+      "branch": "审计",
+      "role": "中会事务所·审计助理",
+      "url": "https://www.shixiseng.com/intern/inn_7cumwelpvbsj?pcm=pc_SearchList",
+      "terms": [
+        "资料审核",
+        "现场审计",
+        "底稿编制"
+      ]
+    },
+    {
+      "id": "JD51",
+      "track": "金融",
+      "branch": "审计",
+      "role": "河南中蓝·审计助理实习",
+      "url": "https://www.zhaopin.com/jobdetail/CCL1490867870J40913389203.htm",
+      "terms": [
+        "现场核实",
+        "核对数据",
+        "询证函"
+      ]
+    },
+    {
+      "id": "JD52",
+      "track": "金融",
+      "branch": "审计",
+      "role": "武汉朝晖·审计实习",
+      "url": "https://cn.linkedin.com/jobs/view/%E5%AE%A1%E8%AE%A1%E5%AE%9E%E4%B9%A0%E7%94%9F-at-%E6%AD%A6%E6%B1%89%E6%9C%9D%E6%99%96%E4%BC%9A%E8%AE%A1%E5%B8%88%E4%BA%8B%E5%8A%A1%E6%89%80-%E6%99%AE%E9%80%9A%E5%90%88%E4%BC%99-4445323481",
+      "terms": [
+        "审计抽凭",
+        "现金盘点",
+        "固定资产盘点",
+        "银行询证"
+      ]
+    },
+    {
+      "id": "JD53",
+      "track": "金融",
+      "branch": "审计",
+      "role": "中审众环·审计助理",
+      "url": "https://www.shushuqiuzhi.com/position/265225",
+      "terms": [
+        "年报审计",
+        "专项审计",
+        "监盘",
+        "测算"
+      ]
+    }
+  ],
+  "keywords": [
+    {
+      "term": "需求分析",
+      "sample_ids": [
+        "JD01",
+        "JD06"
+      ]
+    },
+    {
+      "term": "PRD",
+      "sample_ids": [
+        "JD01",
+        "JD06"
+      ]
+    },
+    {
+      "term": "Agent",
+      "sample_ids": [
+        "JD01"
+      ]
+    },
+    {
+      "term": "Workflow",
+      "sample_ids": [
+        "JD01"
+      ]
+    },
+    {
+      "term": "日志",
+      "sample_ids": [
+        "JD01"
+      ]
+    },
+    {
+      "term": "Bad Case",
+      "sample_ids": [
+        "JD01"
+      ]
+    },
+    {
+      "term": "评测标准",
+      "sample_ids": [
+        "JD02"
+      ]
+    },
+    {
+      "term": "召回排序",
+      "sample_ids": [
+        "JD02"
+      ]
+    },
+    {
+      "term": "多模态搜索",
+      "sample_ids": [
+        "JD02"
+      ]
+    },
+    {
+      "term": "RAG",
+      "sample_ids": [
+        "JD02"
+      ]
+    },
+    {
+      "term": "能力边界",
+      "sample_ids": [
+        "JD02"
+      ]
+    },
+    {
+      "term": "需求排序",
+      "sample_ids": [
+        "JD03"
+      ]
+    },
+    {
+      "term": "能力诊断",
+      "sample_ids": [
+        "JD03"
+      ]
+    },
+    {
+      "term": "评测集",
+      "sample_ids": [
+        "JD03"
+      ]
+    },
+    {
+      "term": "工具调用",
+      "sample_ids": [
+        "JD03"
+      ]
+    },
+    {
+      "term": "评测成本",
+      "sample_ids": [
+        "JD03"
+      ]
+    },
+    {
+      "term": "意图识别",
+      "sample_ids": [
+        "JD04"
+      ]
+    },
+    {
+      "term": "原型",
+      "sample_ids": [
+        "JD04"
+      ]
+    },
+    {
+      "term": "执行成功",
+      "sample_ids": [
+        "JD04"
+      ]
+    },
+    {
+      "term": "准时送达",
+      "sample_ids": [
+        "JD04"
+      ]
+    },
+    {
+      "term": "需求文档",
+      "sample_ids": [
+        "JD04",
+        "JD10"
+      ]
+    },
+    {
+      "term": "用户调研",
+      "sample_ids": [
+        "JD05",
+        "JD10"
+      ]
+    },
+    {
+      "term": "业务流程",
+      "sample_ids": [
+        "JD05",
+        "JD11"
+      ]
+    },
+    {
+      "term": "原型图",
+      "sample_ids": [
+        "JD05"
+      ]
+    },
+    {
+      "term": "效果测试",
+      "sample_ids": [
+        "JD05"
+      ]
+    },
+    {
+      "term": "商业化路径",
+      "sample_ids": [
+        "JD05"
+      ]
+    },
+    {
+      "term": "竞品分析",
+      "sample_ids": [
+        "JD06"
+      ]
+    },
+    {
+      "term": "效果复盘",
+      "sample_ids": [
+        "JD06"
+      ]
+    },
+    {
+      "term": "项目管理",
+      "sample_ids": [
+        "JD06"
+      ]
+    },
+    {
+      "term": "互动玩法",
+      "sample_ids": [
+        "JD07"
+      ]
+    },
+    {
+      "term": "竞品研究",
+      "sample_ids": [
+        "JD07"
+      ]
+    },
+    {
+      "term": "需求拆解",
+      "sample_ids": [
+        "JD07"
+      ]
+    },
+    {
+      "term": "数据分析",
+      "sample_ids": [
+        "JD07",
+        "JD11",
+        "JD21"
+      ]
+    },
+    {
+      "term": "深度访谈",
+      "sample_ids": [
+        "JD08"
+      ]
+    },
+    {
+      "term": "焦点小组",
+      "sample_ids": [
+        "JD08"
+      ]
+    },
+    {
+      "term": "问卷调研",
+      "sample_ids": [
+        "JD08"
+      ]
+    },
+    {
+      "term": "原型测试",
+      "sample_ids": [
+        "JD08"
+      ]
+    },
+    {
+      "term": "满意度",
+      "sample_ids": [
+        "JD08"
+      ]
+    },
+    {
+      "term": "用户反馈",
+      "sample_ids": [
+        "JD09",
+        "JD11"
+      ]
+    },
+    {
+      "term": "体验洞察",
+      "sample_ids": [
+        "JD09"
+      ]
+    },
+    {
+      "term": "交互原型",
+      "sample_ids": [
+        "JD09"
+      ]
+    },
+    {
+      "term": "可用性测试",
+      "sample_ids": [
+        "JD09"
+      ]
+    },
+    {
+      "term": "产品复盘",
+      "sample_ids": [
+        "JD10"
+      ]
+    },
+    {
+      "term": "Figma",
+      "sample_ids": [
+        "JD10"
+      ]
+    },
+    {
+      "term": "问题拆解",
+      "sample_ids": [
+        "JD12"
+      ]
+    },
+    {
+      "term": "流程规范",
+      "sample_ids": [
+        "JD12"
+      ]
+    },
+    {
+      "term": "验证策略效果",
+      "sample_ids": [
+        "JD12"
+      ]
+    },
+    {
+      "term": "现场踏查",
+      "sample_ids": [
+        "JD13"
+      ]
+    },
+    {
+      "term": "业务访谈",
+      "sample_ids": [
+        "JD13"
+      ]
+    },
+    {
+      "term": "客户痛点",
+      "sample_ids": [
+        "JD13"
+      ]
+    },
+    {
+      "term": "漏斗分析",
+      "sample_ids": [
+        "JD14"
+      ]
+    },
+    {
+      "term": "登录率",
+      "sample_ids": [
+        "JD14"
+      ]
+    },
+    {
+      "term": "购买率",
+      "sample_ids": [
+        "JD14"
+      ]
+    },
+    {
+      "term": "方案设计",
+      "sample_ids": [
+        "JD14"
+      ]
+    },
+    {
+      "term": "增长实验",
+      "sample_ids": [
+        "JD15"
+      ]
+    },
+    {
+      "term": "活跃",
+      "sample_ids": [
+        "JD15"
+      ]
+    },
+    {
+      "term": "留存",
+      "sample_ids": [
+        "JD15"
+      ]
+    },
+    {
+      "term": "行为路径",
+      "sample_ids": [
+        "JD15"
+      ]
+    },
+    {
+      "term": "指标归因",
+      "sample_ids": [
+        "JD16"
+      ]
+    },
+    {
+      "term": "实验设计",
+      "sample_ids": [
+        "JD16"
+      ]
+    },
+    {
+      "term": "SQL",
+      "sample_ids": [
+        "JD16"
+      ]
+    },
+    {
+      "term": "指标异动",
+      "sample_ids": [
+        "JD16"
+      ]
+    },
+    {
+      "term": "归因策略",
+      "sample_ids": [
+        "JD17"
+      ]
+    },
+    {
+      "term": "转化跟踪",
+      "sample_ids": [
+        "JD17"
+      ]
+    },
+    {
+      "term": "埋点",
+      "sample_ids": [
+        "JD17"
+      ]
+    },
+    {
+      "term": "归因准确度",
+      "sample_ids": [
+        "JD17"
+      ]
+    },
+    {
+      "term": "验收测试",
+      "sample_ids": [
+        "JD18"
+      ]
+    },
+    {
+      "term": "用户行为",
+      "sample_ids": [
+        "JD18"
+      ]
+    },
+    {
+      "term": "落地页转化率",
+      "sample_ids": [
+        "JD18"
+      ]
+    },
+    {
+      "term": "提示词",
+      "sample_ids": [
+        "JD19",
+        "JD29"
+      ]
+    },
+    {
+      "term": "自动化评测",
+      "sample_ids": [
+        "JD19"
+      ]
+    },
+    {
+      "term": "模型迭代",
+      "sample_ids": [
+        "JD19"
+      ]
+    },
+    {
+      "term": "竞品对标",
+      "sample_ids": [
+        "JD20"
+      ]
+    },
+    {
+      "term": "客户访谈",
+      "sample_ids": [
+        "JD20"
+      ]
+    },
+    {
+      "term": "解决方案评估",
+      "sample_ids": [
+        "JD20"
+      ]
+    },
+    {
+      "term": "描述问题",
+      "sample_ids": [
+        "JD21"
+      ]
+    },
+    {
+      "term": "Excel",
+      "sample_ids": [
+        "JD21"
+      ]
+    },
+    {
+      "term": "拉新推广",
+      "sample_ids": [
+        "JD22"
+      ]
+    },
+    {
+      "term": "使用反馈",
+      "sample_ids": [
+        "JD22"
+      ]
+    },
+    {
+      "term": "产品迭代",
+      "sample_ids": [
+        "JD22"
+      ]
+    },
+    {
+      "term": "选题",
+      "sample_ids": [
+        "JD23"
+      ]
+    },
+    {
+      "term": "使用步骤",
+      "sample_ids": [
+        "JD23"
+      ]
+    },
+    {
+      "term": "评论",
+      "sample_ids": [
+        "JD23"
+      ]
+    },
+    {
+      "term": "用户分层",
+      "sample_ids": [
+        "JD24",
+        "JD32"
+      ]
+    },
+    {
+      "term": "用户留存",
+      "sample_ids": [
+        "JD24"
+      ]
+    },
+    {
+      "term": "商务对接",
+      "sample_ids": [
+        "JD24"
+      ]
+    },
+    {
+      "term": "合同落地",
+      "sample_ids": [
+        "JD24"
+      ]
+    },
+    {
+      "term": "项目排期",
+      "sample_ids": [
+        "JD25"
+      ]
+    },
+    {
+      "term": "素材审核",
+      "sample_ids": [
+        "JD25"
+      ]
+    },
+    {
+      "term": "渠道报表",
+      "sample_ids": [
+        "JD25"
+      ]
+    },
+    {
+      "term": "转化漏斗",
+      "sample_ids": [
+        "JD26"
+      ]
+    },
+    {
+      "term": "线索质量",
+      "sample_ids": [
+        "JD26"
+      ]
+    },
+    {
+      "term": "ROI",
+      "sample_ids": [
+        "JD26"
+      ]
+    },
+    {
+      "term": "分销商",
+      "sample_ids": [
+        "JD26"
+      ]
+    },
+    {
+      "term": "差异化运营",
+      "sample_ids": [
+        "JD27"
+      ]
+    },
+    {
+      "term": "渠道合作",
+      "sample_ids": [
+        "JD27"
+      ]
+    },
+    {
+      "term": "运营分析报告",
+      "sample_ids": [
+        "JD27"
+      ]
+    },
+    {
+      "term": "入驻",
+      "sample_ids": [
+        "JD27"
+      ]
+    },
+    {
+      "term": "选题库",
+      "sample_ids": [
+        "JD28"
+      ]
+    },
+    {
+      "term": "曝光",
+      "sample_ids": [
+        "JD28",
+        "JD31"
+      ]
+    },
+    {
+      "term": "互动率",
+      "sample_ids": [
+        "JD28"
+      ]
+    },
+    {
+      "term": "涨粉",
+      "sample_ids": [
+        "JD28"
+      ]
+    },
+    {
+      "term": "进店转化",
+      "sample_ids": [
+        "JD28"
+      ]
+    },
+    {
+      "term": "账号搭建",
+      "sample_ids": [
+        "JD29"
+      ]
+    },
+    {
+      "term": "视频剪辑",
+      "sample_ids": [
+        "JD29"
+      ]
+    },
+    {
+      "term": "内容策划",
+      "sample_ids": [
+        "JD29",
+        "JD30"
+      ]
+    },
+    {
+      "term": "素材搜集",
+      "sample_ids": [
+        "JD30"
+      ]
+    },
+    {
+      "term": "文案撰写",
+      "sample_ids": [
+        "JD30"
+      ]
+    },
+    {
+      "term": "数据复盘",
+      "sample_ids": [
+        "JD30"
+      ]
+    },
+    {
+      "term": "品牌内容策划",
+      "sample_ids": [
+        "JD31"
+      ]
+    },
+    {
+      "term": "脚本撰写",
+      "sample_ids": [
+        "JD31"
+      ]
+    },
+    {
+      "term": "产品卖点",
+      "sample_ids": [
+        "JD31"
+      ]
+    },
+    {
+      "term": "用户画像",
+      "sample_ids": [
+        "JD32"
+      ]
+    },
+    {
+      "term": "留存率",
+      "sample_ids": [
+        "JD32"
+      ]
+    },
+    {
+      "term": "复购率",
+      "sample_ids": [
+        "JD32"
+      ]
+    },
+    {
+      "term": "转化率",
+      "sample_ids": [
+        "JD32"
+      ]
+    },
+    {
+      "term": "活动参与量",
+      "sample_ids": [
+        "JD33"
+      ]
+    },
+    {
+      "term": "投稿量",
+      "sample_ids": [
+        "JD33"
+      ]
+    },
+    {
+      "term": "作者留存",
+      "sample_ids": [
+        "JD33"
+      ]
+    },
+    {
+      "term": "流失预警",
+      "sample_ids": [
+        "JD33"
+      ]
+    },
+    {
+      "term": "DAU",
+      "sample_ids": [
+        "JD34"
+      ]
+    },
+    {
+      "term": "异常归因",
+      "sample_ids": [
+        "JD34"
+      ]
+    },
+    {
+      "term": "用户分群",
+      "sample_ids": [
+        "JD34"
+      ]
+    },
+    {
+      "term": "渠道质量评估",
+      "sample_ids": [
+        "JD34"
+      ]
+    },
+    {
+      "term": "私域转化",
+      "sample_ids": [
+        "JD35"
+      ]
+    },
+    {
+      "term": "订阅数量",
+      "sample_ids": [
+        "JD35"
+      ]
+    },
+    {
+      "term": "用户活跃度",
+      "sample_ids": [
+        "JD35"
+      ]
+    },
+    {
+      "term": "用户触达",
+      "sample_ids": [
+        "JD36"
+      ]
+    },
+    {
+      "term": "活动复盘",
+      "sample_ids": [
+        "JD36"
+      ]
+    },
+    {
+      "term": "生命周期",
+      "sample_ids": [
+        "JD36"
+      ]
+    },
+    {
+      "term": "估值模型",
+      "sample_ids": [
+        "JD37",
+        "JD43"
+      ]
+    },
+    {
+      "term": "深度研究报告",
+      "sample_ids": [
+        "JD37"
+      ]
+    },
+    {
+      "term": "课题答辩",
+      "sample_ids": [
+        "JD37"
+      ]
+    },
+    {
+      "term": "盈利预测模型",
+      "sample_ids": [
+        "JD38"
+      ]
+    },
+    {
+      "term": "产业链",
+      "sample_ids": [
+        "JD38",
+        "JD40"
+      ]
+    },
+    {
+      "term": "定价模型",
+      "sample_ids": [
+        "JD38"
+      ]
+    },
+    {
+      "term": "产业链调研",
+      "sample_ids": [
+        "JD39"
+      ]
+    },
+    {
+      "term": "尽职调查",
+      "sample_ids": [
+        "JD39"
+      ]
+    },
+    {
+      "term": "会议纪要",
+      "sample_ids": [
+        "JD39"
+      ]
+    },
+    {
+      "term": "投资价值分析报告",
+      "sample_ids": [
+        "JD39"
+      ]
+    },
+    {
+      "term": "核心驱动因素",
+      "sample_ids": [
+        "JD40"
+      ]
+    },
+    {
+      "term": "投资建议",
+      "sample_ids": [
+        "JD40"
+      ]
+    },
+    {
+      "term": "实地调研",
+      "sample_ids": [
+        "JD41"
+      ]
+    },
+    {
+      "term": "财务分析",
+      "sample_ids": [
+        "JD41"
+      ]
+    },
+    {
+      "term": "估值建模",
+      "sample_ids": [
+        "JD41"
+      ]
+    },
+    {
+      "term": "投资路演",
+      "sample_ids": [
+        "JD41"
+      ]
+    },
+    {
+      "term": "重点行业",
+      "sample_ids": [
+        "JD42"
+      ]
+    },
+    {
+      "term": "个股",
+      "sample_ids": [
+        "JD42"
+      ]
+    },
+    {
+      "term": "研究资料",
+      "sample_ids": [
+        "JD42"
+      ]
+    },
+    {
+      "term": "内容反馈",
+      "sample_ids": [
+        "JD42"
+      ]
+    },
+    {
+      "term": "基本面分析",
+      "sample_ids": [
+        "JD43"
+      ]
+    },
+    {
+      "term": "研究报告",
+      "sample_ids": [
+        "JD43"
+      ]
+    },
+    {
+      "term": "审计工作底稿",
+      "sample_ids": [
+        "JD44"
+      ]
+    },
+    {
+      "term": "抽查凭证",
+      "sample_ids": [
+        "JD44"
+      ]
+    },
+    {
+      "term": "存货监盘",
+      "sample_ids": [
+        "JD44"
+      ]
+    },
+    {
+      "term": "核对",
+      "sample_ids": [
+        "JD44"
+      ]
+    },
+    {
+      "term": "审计业务",
+      "sample_ids": [
+        "JD45"
+      ]
+    },
+    {
+      "term": "工作底稿",
+      "sample_ids": [
+        "JD45",
+        "JD48"
+      ]
+    },
+    {
+      "term": "函证",
+      "sample_ids": [
+        "JD46",
+        "JD49"
+      ]
+    },
+    {
+      "term": "抽凭",
+      "sample_ids": [
+        "JD46"
+      ]
+    },
+    {
+      "term": "盘点",
+      "sample_ids": [
+        "JD46",
+        "JD49"
+      ]
+    },
+    {
+      "term": "整理底稿",
+      "sample_ids": [
+        "JD46"
+      ]
+    },
+    {
+      "term": "项目资料",
+      "sample_ids": [
+        "JD47"
+      ]
+    },
+    {
+      "term": "底稿",
+      "sample_ids": [
+        "JD47"
+      ]
+    },
+    {
+      "term": "档案",
+      "sample_ids": [
+        "JD47"
+      ]
+    },
+    {
+      "term": "审计程序",
+      "sample_ids": [
+        "JD48"
+      ]
+    },
+    {
+      "term": "审计证据",
+      "sample_ids": [
+        "JD48"
+      ]
+    },
+    {
+      "term": "归档",
+      "sample_ids": [
+        "JD48",
+        "JD49"
+      ]
+    },
+    {
+      "term": "整理",
+      "sample_ids": [
+        "JD49"
+      ]
+    },
+    {
+      "term": "资料审核",
+      "sample_ids": [
+        "JD50"
+      ]
+    },
+    {
+      "term": "现场审计",
+      "sample_ids": [
+        "JD50"
+      ]
+    },
+    {
+      "term": "底稿编制",
+      "sample_ids": [
+        "JD50"
+      ]
+    },
+    {
+      "term": "现场核实",
+      "sample_ids": [
+        "JD51"
+      ]
+    },
+    {
+      "term": "核对数据",
+      "sample_ids": [
+        "JD51"
+      ]
+    },
+    {
+      "term": "询证函",
+      "sample_ids": [
+        "JD51"
+      ]
+    },
+    {
+      "term": "审计抽凭",
+      "sample_ids": [
+        "JD52"
+      ]
+    },
+    {
+      "term": "现金盘点",
+      "sample_ids": [
+        "JD52"
+      ]
+    },
+    {
+      "term": "固定资产盘点",
+      "sample_ids": [
+        "JD52"
+      ]
+    },
+    {
+      "term": "银行询证",
+      "sample_ids": [
+        "JD52"
+      ]
+    },
+    {
+      "term": "年报审计",
+      "sample_ids": [
+        "JD53"
+      ]
+    },
+    {
+      "term": "专项审计",
+      "sample_ids": [
+        "JD53"
+      ]
+    },
+    {
+      "term": "监盘",
+      "sample_ids": [
+        "JD53"
+      ]
+    },
+    {
+      "term": "测算",
+      "sample_ids": [
+        "JD53"
+      ]
+    }
+  ]
+}

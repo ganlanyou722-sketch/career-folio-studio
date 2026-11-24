@@ -4,10 +4,10 @@
 
 | 模块 | 职责 | 已收录 |
 | --- | --- | --- |
-| `experience` | 材料核对、经历整理与事实提取 | 待添加 |
-| `match` | 解析 JD、匹配证据与岗位比较 | 待添加 |
-| `resume` | 简历起稿、定向改写与版式 | [中文产品经理求职简历](resume/chinese-product-manager-cv/SKILL.md) |
-| `interview` | 面试问题、追问、STAR 案例与反问 | 待添加 |
+| `experience` | 材料核对、经历整理与事实提取 | [经历事实归档](experience/experience-evidence-cn/SKILL.md) |
+| `match` | 解析 JD、匹配证据与岗位比较 | [岗位证据匹配](match/job-evidence-match-cn/SKILL.md) |
+| `resume` | 简历起稿、定向改写与版式 | [简历内容优化](resume/resume-content-cn/SKILL.md)、[中文产品经理排版 v1.1](resume/chinese-product-manager-cv/SKILL.md) |
+| `interview` | 面试问题、追问、STAR 案例与反问 | 独立 skill 待添加，可参考[上游交接样例](match/job-evidence-match-cn/examples/match.json) |
 
 ## 加入一个技能
 

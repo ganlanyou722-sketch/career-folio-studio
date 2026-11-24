@@ -178,6 +178,10 @@ class Resume:
             top = self.section(label, top+(2 if any_section else 0))
             for i, item in enumerate(items):
                 if i:
+                    self.c.setLineWidth(0.65)
+                    self.c.line(LEFT, H-top-1, RIGHT, H-top-1)
+                    self.blocks.append({'kind': 'entry_separator', 'section': key,
+                                        'top': round(top+1, 3)})
                     top += 3
                 top = self.entry(item['title'], item['date'], top, size)
                 top = self.bullets(item.get('bullets', []), top)

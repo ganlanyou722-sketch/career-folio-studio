@@ -1,0 +1,85 @@
+{
+  "fictional": true,
+  "snapshot": "L1",
+  "projects": [
+    {
+      "id": "P01",
+      "name": "校园自习室预约试点",
+      "type": "校园实践",
+      "theme": "校园服务与用户体验",
+      "summary": "围绕预约途中退出的问题整理试用反馈，调整入口后由两个社团复测。",
+      "award": null,
+      "factRefs": [
+        "F1@1",
+        "F2@1",
+        "F3@1",
+        "F4@1"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "S1",
+      "file": "结项汇报.pptx",
+      "locator": "第 4 页",
+      "excerpt": "团队在试点中调整预约入口；两个社团随后完成复测。没有统计留存。"
+    },
+    {
+      "id": "S2",
+      "file": "试用复盘.docx",
+      "locator": "第 3 段，个人工作记录",
+      "excerpt": "我整理 30 条试用反馈，按发生环节归类；入口问题集中，因此我建议先改入口。"
+    }
+  ],
+  "facts": [
+    {
+      "id": "F1",
+      "revision": 1,
+      "projectId": "P01",
+      "type": "动作",
+      "subject": "本人",
+      "claim": "按发生环节归类了 30 条试用反馈",
+      "sourceIds": [
+        "S2"
+      ],
+      "status": "材料明确"
+    },
+    {
+      "id": "F2",
+      "revision": 1,
+      "projectId": "P01",
+      "type": "决策",
+      "subject": "本人",
+      "claim": "根据反馈集中位置，建议先改预约入口",
+      "sourceIds": [
+        "S2"
+      ],
+      "status": "材料明确"
+    },
+    {
+      "id": "F3",
+      "revision": 1,
+      "projectId": "P01",
+      "type": "交付",
+      "subject": "团队",
+      "claim": "试点中调整预约入口",
+      "sourceIds": [
+        "S1"
+      ],
+      "status": "材料明确"
+    },
+    {
+      "id": "F4",
+      "revision": 1,
+      "projectId": "P01",
+      "type": "结果",
+      "subject": "团队",
+      "claim": "两个社团完成复测，未统计留存",
+      "sourceIds": [
+        "S1"
+      ],
+      "status": "材料明确"
+    }
+  ],
+  "pendingQuestions": []
+}

@@ -1,0 +1,77 @@
+{
+  "fictional": true,
+  "librarySnapshot": "L1",
+  "intent": "两个岗位均可接受",
+  "jobs": [
+    {
+      "jdRevision": "J1@1",
+      "title": "产品运营实习",
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "必须能整理试用反馈并提出改进建议",
+          "kind": "明确必需",
+          "state": "直接支持",
+          "refs": [
+            "F1@1",
+            "F2@1"
+          ],
+          "why": "个人记录支持整理、归类和提出建议。"
+        },
+        {
+          "id": "R2",
+          "text": "跟踪留存变化",
+          "kind": "普通职责",
+          "state": "待补信息",
+          "refs": [
+            "F4@1"
+          ],
+          "why": "团队仅记录复测；该项目未统计留存，其他经历尚待补充。"
+        }
+      ]
+    },
+    {
+      "jdRevision": "J2@1",
+      "title": "渠道运营实习",
+      "requirements": [
+        {
+          "id": "R3",
+          "text": "必须有独立拓展渠道合作方的经历",
+          "kind": "明确必需",
+          "state": "待补信息",
+          "refs": [],
+          "why": "社团复测无法证明由本人发起渠道合作。"
+        }
+      ]
+    }
+  ],
+  "recommendation": "同等意向下优先产品运营。J1 的一项必需能力有直接证据，J2 的必需能力需要补充。",
+  "resumeHandoff": {
+    "jdRevision": "J1@1",
+    "projectId": "P01",
+    "priority": "重点展开",
+    "factRefs": [
+      "F1@1",
+      "F2@1",
+      "F4@1"
+    ],
+    "wording": "将 30 条试用反馈按发生环节归类，建议优先调整预约入口；两个社团随后参与复测。"
+  },
+  "interviewHandoff": {
+    "jdRevision": "J1@1",
+    "resumeRevision": null,
+    "resumeStatus": "准备草稿，投递后绑定具体修订",
+    "projectId": "P01",
+    "factRefs": [
+      "F1@1",
+      "F2@1",
+      "F3@1",
+      "F4@1"
+    ],
+    "hook": "为什么先改预约入口？",
+    "answerEvidence": "反馈按发生环节归类后，问题集中在入口。",
+    "followUp": "如何判断调整有效？",
+    "limit": "只确认两个社团完成复测。尚缺复测结论和前后对比，不能声称留存提升。",
+    "optionalQuestion": "复测中是否有同一任务的完成记录或具体反馈？"
+  }
+}
