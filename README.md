@@ -131,7 +131,9 @@ node --test tools/skills.test.mjs
 
 ## 用自己的简历和 JD 生成建议
 
-需要 Node.js 22.15 或更新版本。运行 `npm ci`，将 [.env.example](.env.example) 复制为 `.env`，按模型服务的实际配置填写 `CV_MODEL_ENDPOINT`（完整的 Chat Completions HTTPS 地址）、`CV_MODEL_NAME` 和所需的 `CV_MODEL_KEY`。模型支持图片时，可设置 `CV_MODEL_VISION=1`。运行 `npm start` 后访问 `http://127.0.0.1:4399`。
+需要 Node.js 22.15 或更新版本。运行 `npm ci`，将 [.env.example](.env.example) 复制为 `.env`，只填 `DEEPSEEK_API_KEY`。运行 `npm start` 后访问 `http://127.0.0.1:4399`。
+
+默认调用 DeepSeek 官方 Chat Completions 的 `deepseek-flash`，覆盖文字改写、事实复核和截图转录。可设置 `CV_MODEL_NAME=deepseek-v4-pro` 将文字改写和复核切换到 V4 Pro，截图仍交给 Flash。使用其他兼容服务时，填写其完整 `CV_MODEL_ENDPOINT`、`CV_MODEL_NAME` 和该服务自己的 `CV_MODEL_KEY`。使用 DeepSeek 以外的地址时，服务不会发送 `DEEPSEEK_API_KEY`。[DeepSeek 模型与价格](https://api-docs.deepseek.com/quick_start/pricing/)
 
 1. 在简历优化台导入 PDF、DOCX、TXT 或图片，核对提取的原文，再创建可编辑底稿。PDF 有文字层时直接提取文字，扫描页与截图走视觉识别。导入后的版式采用工作台的 A4 画布，复杂文档的分栏顺序需要核对。
 2. 在岗位匹配台上传或粘贴目标 JD。要转录图片，先勾选视觉识别。核对公司、岗位与要求，点击「据此去优化简历」。没有底稿时，填写简历后会回到同一个 JD。
@@ -141,4 +143,8 @@ node --test tools/skills.test.mjs
 
 ### 分享给体验者
 
-用支持 Node 或 Docker 的 HTTPS 主机运行同一个服务，让网页和 API 位于同一地址。容器默认监听 `4399`。将模型配置写入主机的环境变量或 Secret，设置 `PUBLIC_ORIGIN` 为线上 HTTPS 地址，并设置一个随机的 `CV_INVITE_CODE`。部署完成后检查 `/api/ai/status` 的 `available`，用无痕窗口上传一份虚构简历和 JD，再把站点链接和体验码发给测试者。GitHub Pages 可继续提供静态体验版。
+在 Render 创建 Blueprint，选包含 [render.yaml](render.yaml) 的仓库和分支，按提示填入 `DEEPSEEK_API_KEY`。模板使用现成的 Dockerfile，并自动生成 `CV_INVITE_CODE`。工作台以 Render 分配的 HTTPS 地址接收请求。首次部署成功后，到服务的 **Environment** 复制体验码，用虚构简历和 JD 试跑，再把站点链接和体验码发给测试者。DeepSeek 调用按账户用量计费。[Render Blueprint 文档](https://render.com/docs/blueprint-spec)
+
+如使用其他 Node 或 Docker 主机，在服务端 Secret 填入 `DEEPSEEK_API_KEY`，设置 `HOST=0.0.0.0`、`PUBLIC_ORIGIN` 和随机的 `CV_INVITE_CODE`。容器默认监听 `4399`，支持平台注入的 `PORT`。GitHub Pages 可继续提供静态体验版。
+
+`/api/ai/status` 的 `available` 表示服务已读取配置。密钥权限和账户状态由实际生成时验证。密钥只用于服务端请求，体验者使用单独生成的体验码。

@@ -5,7 +5,7 @@ const path = require("node:path");
 const engine = require("../web/shared/evidence-core.js");
 
 const HOST = process.env.HOST || "127.0.0.1";
-const publicOrigin = process.env.PUBLIC_ORIGIN?.trim();
+const publicOrigin = process.env.PUBLIC_ORIGIN?.trim() || process.env.RENDER_EXTERNAL_URL?.trim();
 if (!["127.0.0.1", "::1", "localhost"].includes(HOST) &&
     (!process.env.CV_INVITE_CODE?.trim() || !publicOrigin || !publicOrigin.startsWith("https://"))) {
   throw new Error("对于外部部署，请设置 HTTPS PUBLIC_ORIGIN 和 CV_INVITE_CODE。");

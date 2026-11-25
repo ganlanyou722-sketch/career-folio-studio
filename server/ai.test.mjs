@@ -82,3 +82,50 @@ test("image transcription requires explicit vision setup and sends the uploaded 
   });
   assert.deepEqual(await ai.readDocument(document), {text:"每周至少三天\n熟悉 SQL 优先"});
 });
+
+test("one DeepSeek secret configures official Flash for text and vision", async () => {
+  const calls = [];
+  const ai = createAI({ DEEPSEEK_API_KEY: "fixture-secret" }, async (url, options) => {
+    calls.push(JSON.parse(options.body));
+    assert.equal(url.href, "https://api.deepseek.com/chat/completions");
+    assert.equal(options.headers.authorization, "Bearer fixture-secret");
+    return reply(Array.isArray(calls.at(-1).messages[1].content) ? { text: "岗位截图" } : { edits: [] });
+  });
+  assert.deepEqual(ai.status(), { available: true, vision: true, inviteRequired: false });
+  await ai.tailor({ jd, blocks });
+  await ai.readDocument({ name: "JD.png", data: Buffer.from("89504e470d0a1a0a", "hex").toString("base64") });
+  for (const request of calls) {
+    assert.equal(request.model, "deepseek-flash");
+    assert.deepEqual(request.thinking, { type: "disabled" });
+    assert.deepEqual(request.response_format, { type: "json_object" });
+  }
+});
+
+test("DeepSeek Pro handles text while Flash handles screenshots with the same secret", async () => {
+  const used = [];
+  const ai = createAI({ DEEPSEEK_API_KEY: "fixture-secret", CV_MODEL_NAME: "deepseek-v4-pro" }, async (_url, options) => {
+    const request = JSON.parse(options.body);
+    used.push(request.model);
+    return reply(Array.isArray(request.messages[1].content) ? { text: "截图" } : { edits: [] });
+  });
+  await ai.tailor({ jd, blocks });
+  await ai.readDocument({ name: "JD.png", data: Buffer.from("89504e470d0a1a0a", "hex").toString("base64") });
+  assert.deepEqual(used, ["deepseek-v4-pro", "deepseek-flash"]);
+  assert.equal(createAI({ DEEPSEEK_API_KEY: "fixture-secret", CV_MODEL_VISION: "0" }).status().vision, false);
+});
+
+test("does not forward the DeepSeek key to another provider or expose upstream errors", async () => {
+  const other = createAI({ CV_MODEL_ENDPOINT: "https://model.example.test/chat/completions", CV_MODEL_NAME: "custom", DEEPSEEK_API_KEY: "fixture-secret" },
+    async (_url, options) => {
+      assert.equal(options.headers.authorization, undefined);
+      assert.equal(JSON.parse(options.body).response_format, undefined);
+      return reply({ edits: [] });
+    });
+  await other.tailor({ jd, blocks });
+  for (const [status, message] of [[401, /密钥验证失败/], [402, /余额不足/]]) {
+    const ai = createAI({ DEEPSEEK_API_KEY: "fixture-secret" },
+      async () => new Response("upstream private content", { status }));
+    await assert.rejects(ai.tailor({ jd, blocks }), error =>
+      error.status === 502 && message.test(error.message) && !error.message.includes("upstream private content"));
+  }
+});
