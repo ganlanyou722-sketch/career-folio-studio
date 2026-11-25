@@ -27,6 +27,7 @@
   async function request(action, payload, root, signal) {
     const info = await getStatus();
     if (!info) throw new Error("当前是静态体验版。请打开已启用文件解析和 AI 的工作台，或先粘贴原文。");
+    if (info.setupRequired) throw new Error("请由管理员先在腾讯云配置站点地址和体验码。");
     const code = root.querySelector(".ai-invite input")?.value.trim() || storedInvite();
     if (info.inviteRequired && !code) throw new Error("请先输入体验码。");
     const timeout = AbortSignal.timeout(100000);
@@ -104,7 +105,8 @@
       });
       getStatus().then(info => {
         bindGate(root, info);
-        if (!info?.available) status.textContent = "当前页面的 AI 服务尚未就绪。";
+        if (info?.setupRequired) status.textContent = "请先在腾讯云配置站点地址和体验码。";
+        else if (!info?.available) status.textContent = "当前页面的 AI 服务尚未就绪。";
       });
       picker.onchange = () => { result = null; review.replaceChildren(); save.hidden = true; status.textContent = ""; };
       generate.onclick = async () => {

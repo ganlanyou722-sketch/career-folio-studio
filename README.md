@@ -143,8 +143,4 @@ node --test tools/skills.test.mjs
 
 ### 分享给体验者
 
-在 Render 创建 Blueprint，选包含 [render.yaml](render.yaml) 的仓库和分支，按提示填入 `DEEPSEEK_API_KEY`。模板使用现成的 Dockerfile，并自动生成 `CV_INVITE_CODE`。工作台以 Render 分配的 HTTPS 地址接收请求。首次部署成功后，到服务的 **Environment** 复制体验码，用虚构简历和 JD 试跑，再把站点链接和体验码发给测试者。DeepSeek 调用按账户用量计费。[Render Blueprint 文档](https://render.com/docs/blueprint-spec)
-
-如使用其他 Node 或 Docker 主机，在服务端 Secret 填入 `DEEPSEEK_API_KEY`，设置 `HOST=0.0.0.0`、`PUBLIC_ORIGIN` 和随机的 `CV_INVITE_CODE`。容器默认监听 `4399`，支持平台注入的 `PORT`。GitHub Pages 可继续提供静态体验版。
-
-`/api/ai/status` 的 `available` 表示服务已读取配置。密钥权限和账户状态由实际生成时验证。密钥只用于服务端请求，体验者使用单独生成的体验码。
+这个项目默认使用腾讯云 CloudBase 云托管。控制台可直接拉取 Git 仓库，也可上传基于仓库根目录打包的 ZIP。容器端口为 `4399`，使用 `/api/health` 检查服务。控制台字段、环境变量和公网域名配置见 [腾讯云部署说明](docs/cloudbase-deploy.md)。

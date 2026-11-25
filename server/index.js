@@ -5,11 +5,16 @@ const path = require("node:path");
 const engine = require("../web/shared/evidence-core.js");
 
 const HOST = process.env.HOST || "127.0.0.1";
-const publicOrigin = process.env.PUBLIC_ORIGIN?.trim() || process.env.RENDER_EXTERNAL_URL?.trim();
-if (!["127.0.0.1", "::1", "localhost"].includes(HOST) &&
-    (!process.env.CV_INVITE_CODE?.trim() || !publicOrigin || !publicOrigin.startsWith("https://"))) {
-  throw new Error("对于外部部署，请设置 HTTPS PUBLIC_ORIGIN 和 CV_INVITE_CODE。");
+let publicOrigin;
+try {
+  const url = new URL(process.env.PUBLIC_ORIGIN?.trim());
+  if (url.protocol === "https:" && !url.username && !url.password &&
+      url.pathname === "/" && !url.search && !url.hash) publicOrigin = url.origin;
+} catch {
+  // CloudBase creates the public address after the first successful deployment.
 }
+const publicHost = !["127.0.0.1", "::1", "localhost"].includes(HOST);
+const needsPublicSetup = publicHost && (!publicOrigin || !process.env.CV_INVITE_CODE?.trim());
 
 const ROOT = path.resolve(__dirname, "..", "web");
 const PORT = Number(
@@ -130,7 +135,16 @@ function sameOrigin(req) {
 
 async function serveAI(req, res, pathname) {
   const ai = await aiService;
-  if (pathname === "/api/ai/status" && req.method === "GET") return send(res, 200, { ok: true, data: ai.status() });
+  if (pathname === "/api/ai/status" && req.method === "GET") {
+    const status = ai.status();
+    if (needsPublicSetup) return send(res, 200, { ok: true, data: {
+      ...status, available: false, vision: false, setupRequired: true,
+    } });
+    return send(res, 200, { ok: true, data: status });
+  }
+  if (needsPublicSetup) {
+    return send(res, 503, { ok: false, error: "请由管理员在云托管设置 HTTPS 访问地址和体验码，再启用材料上传与 AI。" });
+  }
   if (req.method !== "POST" || !sameOrigin(req) || !req.headers["content-type"]?.startsWith("application/json")) {
     return send(res, 403, { ok: false, error: "请从工作台页面发起请求。" });
   }

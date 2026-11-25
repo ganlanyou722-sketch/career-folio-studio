@@ -129,3 +129,18 @@ test("does not forward the DeepSeek key to another provider or expose upstream e
       error.status === 502 && message.test(error.message) && !error.message.includes("upstream private content"));
   }
 });
+
+test("does not start the evidence review after the shared AI deadline", async () => {
+  const deadline = new AbortController();
+  let calls = 0;
+  const ai = createAI(env, async () => {
+    calls++;
+    deadline.abort(new DOMException("fixture timeout", "TimeoutError"));
+    return reply({ edits: [{
+      id: "a", text: "试点期间，协助团队梳理20条反馈。",
+      requirement: jd.text, evidence: "20条反馈", reason: "与试点反馈要求相关",
+    }] });
+  });
+  await assert.rejects(ai.tailor({ jd, blocks }, deadline.signal), { status: 504 });
+  assert.equal(calls, 1);
+});

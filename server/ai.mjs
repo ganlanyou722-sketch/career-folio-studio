@@ -90,11 +90,12 @@ export function createAI(env = process.env, fetchImpl = fetch) {
       throw new AIError(401, "请输入正确的体验码。");
     }
   }
-  async function ask(system, user, modelName = model) {
+  async function ask(system, user, signal, modelName = model) {
     if (!available) throw new AIError(503, deepSeek ? "当前服务还未配置 DeepSeek API 密钥。" : "当前服务还未配置 AI 模型。");
     let result;
     try {
       const messages = [{ role: "system", content: materialPrompt + "\n\n" + system }, { role: "user", content: user }];
+      signal.throwIfAborted();
       const response = await fetchImpl(url, {
         method: "POST", headers: { "content-type": "application/json", ...(key ? { authorization: "Bearer " + key } : {}) },
         body: JSON.stringify({ model: modelName, messages, stream: false, ...(deepSeek ? {
@@ -102,7 +103,7 @@ export function createAI(env = process.env, fetchImpl = fetch) {
           response_format: { type: "json_object" },
           max_tokens: 8192,
         } : {}) }),
-        signal: AbortSignal.timeout(40000), redirect: "error",
+        signal: AbortSignal.any([signal, AbortSignal.timeout(40000)]), redirect: "error",
       });
       if (!response.ok) {
         if (deepSeek && [401, 403].includes(response.status)) throw new AIError(502, "DeepSeek 密钥验证失败，请由管理员检查部署平台的 DEEPSEEK_API_KEY。");
@@ -115,6 +116,9 @@ export function createAI(env = process.env, fetchImpl = fetch) {
       result = choice?.message?.content;
     } catch (error) {
       if (error instanceof AIError) throw error;
+      if (signal.aborted || error.name === "TimeoutError" || error.name === "AbortError") {
+        throw new AIError(504, "模型处理超时，可以减少正文或分开提交扫描页后重试。");
+      }
       throw new AIError(502, "模型服务暂未响应，请稍后重试。");
     }
     try {
@@ -123,17 +127,18 @@ export function createAI(env = process.env, fetchImpl = fetch) {
       throw new AIError(502, "模型返回的内容无法识别，可以重试。");
     }
   }
-  async function transcribe(images) {
+  async function transcribe(images, signal) {
     if (!vision) throw new AIError(422, "当前未开启视觉识别，可使用带文字层的 PDF、DOCX 或粘贴原文。");
     const output = await ask(
       '只做逐行转录，保留顺序、数字、大小写和否定。看不清时写[待核对]。返回 {"text":"完整转录"}。',
       [{type:"text", text:"按图片顺序转录所有可见正文。"}, ...images.map(url => ({type:"image_url", image_url:{url}}))],
+      signal,
       deepSeek ? deepSeekFlash : model,
     );
     if (!text(output?.text)) throw new AIError(422, "图片里没有识别到文字，请更换清晰图片。");
     return output.text;
   }
-  async function tailor(body) {
+  async function tailor(body, signal = AbortSignal.timeout(45000)) {
     const jd = jdInput(body?.jd), blocks = resumeInput(body?.blocks);
     const skill = await latestRules();
     const vocabulary = relevantVocabulary(skill.keywords, jd.text);
@@ -143,12 +148,13 @@ export function createAI(env = process.env, fetchImpl = fetch) {
       '返回 {"edits":[{"id":"正文 ID","text":"改写全文","requirement":"JD 的逐字原句或原句片段","evidence":"原正文的逐字证据","reason":"为什么贴合该项职责"}],"questions":["待用户确认的事实问题"]}。至多 12 条改写和 3 个追问。无需改写时返回空数组。追问仅供核对，不能写入正文。',
       "以下为团队维护的技能文件。遇到版式规则，当前稿的布局优先。",
       ...skill.rules,
-    ].join("\n\n"), JSON.stringify({ jd, blocks, vocabulary }));
+    ].join("\n\n"), JSON.stringify({ jd, blocks, vocabulary }), signal);
     let edits = approvedProposals(output, jd, blocks);
     if (edits.length) {
       const review = await ask(
         '独立核对每项改写对原文的忠实度。完整保留事实、对象、归属、数字、范围、动作程度、时态和结果且没有新增主张才通过。返回 {"supported":["通过的正文 ID"]}。存在疑问则不通过。',
         JSON.stringify(edits.map(({id,original,text}) => ({id,original,text}))),
+        signal,
       );
       if (!Array.isArray(review?.supported)) throw new AIError(502, "模型未完成事实复核，可以重试。");
       edits = edits.filter(edit => review.supported.includes(edit.id));
@@ -156,5 +162,8 @@ export function createAI(env = process.env, fetchImpl = fetch) {
     const questions = Array.isArray(output.questions) ? output.questions.filter(q => !!text(q)).slice(0, 3).map(q => q.slice(0, 220)) : [];
     return { edits, questions, skillRevision: skill.revision };
   }
-  return { status, authorize, tailor, readDocument: body => extractDocument(body, transcribe) };
+  function readDocument(body, signal = AbortSignal.timeout(45000)) {
+    return extractDocument(body, images => transcribe(images, signal));
+  }
+  return { status, authorize, tailor, readDocument };
 }
