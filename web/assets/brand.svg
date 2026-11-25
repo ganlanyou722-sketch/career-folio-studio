@@ -1,1 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><rect width="64" height="64" rx="17" fill="#2c5442"/><g fill="none" stroke="#fcf7df" stroke-linejoin="round" stroke-width="3"><path d="m14 22 18-8 18 8-18 9z"/><path d="m14 30 18 9 18-9M14 38l18 9 18-9"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <title>好好投 · 羽毛笔与牛皮纸</title>
+  <path d="M10 14q0-3 4-4l33-2 6 9-1 36q0 3-4 4l-34 1q-3 0-4-4z" fill="#ead0a2" stroke="#8d613c" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M47 8l-1 9 7 0" fill="#f5e5c4" stroke="#8d613c" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="m17 24 12-1m-12 7 8-1m13 16 8-1m-10 7 10-1" fill="none" stroke="#a3754e" stroke-width="1.7" stroke-linecap="round"/>
+  <path d="M29 40c-5-2-5-8-1-13l7-1-2-3c7-5 15-9 24-10-2 12-8 22-20 27l-5-2z" fill="#37543f" stroke="#2b4433" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M29 40c6-7 12-13 20-20m-13 13 8-2m-4-3 2-5" fill="none" stroke="#e2c69a" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="M29 40c-2 2-3 4-4 6m0 0c-5-4-3 4-8 2-1 0-2 1-2 2" fill="none" stroke="#2b4433" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

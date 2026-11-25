@@ -143,7 +143,7 @@ export function createAI(env = process.env, fetchImpl = fetch) {
     const skill = await latestRules();
     const vocabulary = relevantVocabulary(skill.keywords, jd.text);
     const output = await ask([
-      "你为履历间逐段提供简历改写建议。仅改提交的正文对象；保留标题、时间、版式、段落顺序。可在同一段内将更相关的要点前置。",
+      "你为好好投逐段提供简历改写建议。仅改提交的正文对象；保留标题、时间、版式、段落顺序。可在同一段内将更相关的要点前置。",
       "每条改写的事实范围仅限该段原文。保留主体、否定、参与程度、限定、原始数值与单位、试点阶段、归属和交付物。词库与 JD 只用于检索和理解岗位。绝不能增补技能、证照、指标或推测结果。",
       '返回 {"edits":[{"id":"正文 ID","text":"改写全文","requirement":"JD 的逐字原句或原句片段","evidence":"原正文的逐字证据","reason":"为什么贴合该项职责"}],"questions":["待用户确认的事实问题"]}。至多 12 条改写和 3 个追问。无需改写时返回空数组。追问仅供核对，不能写入正文。',
       "以下为团队维护的技能文件。遇到版式规则，当前稿的布局优先。",

@@ -192,4 +192,4 @@ const server = http.createServer(async (req, res) => {
   serveStatic(req, res);
 });
 
-server.listen(PORT, HOST, () => console.log("履历间运行于 " + HOST + ":" + PORT));
+server.listen(PORT, HOST, () => console.log("好好投运行于 " + HOST + ":" + PORT));

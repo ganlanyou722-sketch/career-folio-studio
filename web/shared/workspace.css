@@ -86,8 +86,9 @@ button svg {
   width: fit-content;
 }
 .brand img {
-  width: 39px;
-  height: 39px;
+  width: 43px;
+  height: 43px;
+  flex: none;
 }
 .brand span {
   font-size: 23px;
@@ -304,6 +305,39 @@ kbd {
   line-height: 1.65;
   color: #727d72;
   margin-top: 5px;
+}
+.home-intro {
+  margin-bottom: 12px;
+}
+.home-intro h1 {
+  font-size: clamp(24px, 2.65vw, 38px);
+  letter-spacing: -.045em;
+  text-wrap: balance;
+}
+.home-overview {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  gap: 22px;
+  margin: 0 0 22px;
+}
+.home-overview p {
+  border-left: 2px solid #c7ba9f;
+  padding-left: 12px;
+  color: #536052;
+  font-size: 14px;
+  line-height: 1.7;
+}
+.home-overview strong {
+  display: block;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+@media (max-width: 740px) {
+  .home-overview {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
 }
 .day-tag {
   font-size: 12px;

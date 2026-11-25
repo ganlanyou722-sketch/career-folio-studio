@@ -1,4 +1,4 @@
-# 履历间开发约定
+# 好好投开发约定
 
 - 本项目的默认云平台是腾讯云 CloudBase。前端和 Node API 通过云托管一起部署，部署步骤见 [腾讯云部署说明](docs/cloudbase-deploy.md)。
 - 后续确实需要云端能力时，优先评估 CloudBase HTTP 网关、身份认证、数据库和云存储。按需求接入，现有模型调用继续使用 DeepSeek。

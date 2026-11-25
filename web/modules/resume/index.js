@@ -1247,7 +1247,7 @@
     out.defineLayout({ name: "A4", width: 210 / 25.4, height: 297 / 25.4 });
     out.layout = "A4";
     out.title = d.title;
-    out.author = "履历间";
+    out.author = "好好投";
     const wrap = document.createElement("div");
     wrap.className = "re-measure";
     document.body.append(wrap);

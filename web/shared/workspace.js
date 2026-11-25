@@ -185,7 +185,7 @@
   }
   function sidebar() {
     document.querySelector("#sidebar").innerHTML =
-      '<button class="brand" data-go="home"><img src="assets/brand.svg" alt=""><span>履历间<small>FOLIO STUDIO</small></span></button><div class="navs">' +
+      '<button class="brand" data-go="home"><img src="assets/brand.svg" alt=""><span>好好投<small>求职工作台</small></span></button><div class="navs">' +
       nav("home") +
       '<div class="nav-label">求职工作台</div>' +
       work.map(nav).join("") +
@@ -231,10 +231,13 @@
     const materials = get("materials", []),
       dir = get("direction", null);
     root.innerHTML =
-      '<div class="home-page"><div class="page-intro"><div><div class="eyebrow"><i></i>WORKSPACE OVERVIEW</div><h1>工作台总览</h1><p>从梳理经历到准备面试，在这里推进你的求职进度。</p></div><span class="day-tag">' +
+      '<div class="home-page"><div class="page-intro home-intro"><div><div class="eyebrow"><i></i>好好投</div><h1>第一份简历写得出，换个岗位改得准。</h1></div><span class="day-tag">' +
       icon("calendar", 16) +
       day() +
-      '</span></div><section class="hero"><div class="map-lines"></div><div class="hero-content"><span class="hero-kicker">' +
+      '</span></div><div class="home-overview" aria-label="产品概述">' +
+      '<p><strong>正在找第一份实习？</strong>从课程项目、竞赛和校园实践里，找出高价值的经历，写成第一份简历。</p>' +
+      '<p><strong>同时看中几个岗位？</strong>上传原稿和岗位描述，让 AI 帮你找出每个岗位最值得突出的经历，再有针对性地调顺序、改措辞。离心仪岗位更进一步~</p>' +
+      '</div><section class="hero"><div class="map-lines"></div><div class="hero-content"><span class="hero-kicker">' +
       icon("compass", 15) +
       " 求职方向 <b>/</b> CAREER PATH</span><h2>你想投哪个方向<span>？</span></h2><p>" +
       (dir?.role
@@ -338,7 +341,9 @@
       else x.removeAttribute("aria-current");
     });
     top(id);
-    document.title = names[id] + " · 履历间";
+    document.title = id === "home"
+      ? "好好投 · 第一份简历写得出，换个岗位改得准。"
+      : names[id] + " · 好好投";
     const root = document.querySelector("#main");
     root.className = "page-" + id;
     root.replaceChildren();
