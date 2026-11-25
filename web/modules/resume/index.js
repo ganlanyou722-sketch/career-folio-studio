@@ -1309,6 +1309,13 @@
     stopEditor();
     const versions = get("resumeVersions", []),
       draft = get("resumeDraft", null);
+    const otherDrafts = [
+      ...new Map(
+        [...Object.values(get("resumeDrafts", {})), ...Object.values(get("resumeTailoredDrafts", {}))]
+          .filter(doc => doc.id !== draft?.id && !doc.sample)
+          .map(doc => [doc.id, doc]),
+      ).values(),
+    ].sort((a, b) => b.updatedAt - a.updatedAt);
     let filter = "";
     root.innerHTML =
       '<section class="re-view"><div class="re-titlebar"><div><h1>简历仓库</h1><p>按岗位找回工作稿与定稿，继续准备下一次投递。</p></div>' +
@@ -1320,6 +1327,7 @@
           "</div><div><small>当前工作稿</small><strong>" +
           esc(draft.title) +
           "</strong></div>" +
+          (otherDrafts.length ? btn("pick-draft", "切换工作稿", "archive") : "") +
           btn("resume", "继续编辑", "edit") +
           "</div>"
         : "") +
@@ -1393,6 +1401,29 @@
       const action = target.dataset.action;
       if (action === "resume") {
         A().go("resume");
+        return;
+      }
+      if (action === "pick-draft") {
+        modal(
+          "切换工作稿",
+          '<label class="re-label">选择原稿或岗位副本<select data-picker>' +
+          otherDrafts.map((doc, index) => '<option value="' + index + '">' +
+            esc(doc.title) + " · r" + esc(doc.revision) + "</option>").join("") +
+          "</select></label>" + btn("open", "打开工作稿", "edit", "re-primary"),
+          (form, close) => {
+            form.querySelector("[data-action=open]").onclick = () => {
+              const selected = otherDrafts[Number(form.querySelector("[data-picker]").value)];
+              const target = get("target", null);
+              if (set("target", selected.target || {}) === false) return;
+              if (set("resumeDraft", selected) === false) {
+                set("target", target);
+                return;
+              }
+              close();
+              A().go("resume");
+            };
+          },
+        );
         return;
       }
       const v = versions.find(
