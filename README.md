@@ -6,7 +6,9 @@
 
 同时看中几个岗位？上传原稿和岗位描述，让 AI 帮你找出每个岗位最值得突出的经历，再有针对性地调顺序、改措辞。离心仪岗位更进一步~
 
-直接在浏览器打开 [web/index.html](web/index.html) 即可体验。也可以在仓库根目录运行下列命令，再访问 `http://127.0.0.1:4398`。
+> **在线体验**：<https://ganlanyou722-sketch.github.io/career-folio-studio/> —— 纯静态、无需注册、数据只保存在你的浏览器。
+
+也可以在浏览器直接打开 [web/index.html](web/index.html) 体验，或在仓库根目录运行下列命令，再访问 `http://127.0.0.1:4398`。
 
 ```sh
 python -m http.server 4398 --bind 127.0.0.1 --directory web
