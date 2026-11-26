@@ -113,6 +113,11 @@ function serveStatic(req, res) {
   catch { return send(res, 400, { ok: false, error: "invalid path" }); }
   const target = path.resolve(ROOT, "." + (urlPath === "/" ? "/index.html" : urlPath));
   if (!target.startsWith(ROOT + path.sep)) return send(res, 403, { ok: false, error: "forbidden" });
+  const topDirectory = path.relative(ROOT, target).split(path.sep)[0];
+  if (/^__v[1-5]__$/.test(topDirectory)) {
+    res.writeHead(302, { location: "/", "cache-control": "no-store" });
+    return res.end();
+  }
   fs.stat(target, (err, stat) => {
     if (err || !stat.isFile()) return send(res, 404, { ok: false, error: "not found" });
     res.writeHead(200, {
