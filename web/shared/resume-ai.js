@@ -6,38 +6,85 @@
     '<button type="button" class="btn' + (primary ? ' primary' : '') + '" data-ai="' + id + '">' + label + '</button>';
   const gate = '<label class="ai-invite" hidden>体验码<input type="password" autocomplete="off" maxlength="160" placeholder="输入邀请人给你的体验码"></label>';
   const statusLine = '<p class="ai-status" role="status" aria-live="polite"></p>';
-  let service;
-  function getStatus() {
-    if (!service) {
-      service = fetch("/api/ai/status", { signal: AbortSignal.timeout(3500) })
-        .then(r => r.ok && r.headers.get("content-type")?.includes("application/json") ? r.json() : null)
-        .then(body => body?.data || null).catch(() => null);
+  const staticStatus = { static: true };
+  const unreachableStatus = { unreachable: true };
+  let pendingStatus, lastStatus, statusExpires = 0;
+  async function probeStatus() {
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        const response = await fetch("/api/ai/status", {
+          cache: "no-store", signal: AbortSignal.timeout(20000),
+        });
+        const json = response.headers.get("content-type")?.includes("application/json");
+        if (response.status === 404 && !json) return staticStatus;
+        if (response.ok && json) {
+          const body = await response.json();
+          if (body?.ok && typeof body.data?.inviteRequired === "boolean") return body.data;
+        }
+      } catch {
+        // CloudBase may still be starting, or the connection may be transiently down.
+      }
+      if (attempt === 0) await new Promise(resolve => setTimeout(resolve, 600));
     }
-    return service;
+    return unreachableStatus;
+  }
+  function getStatus() {
+    if (!/^https?:$/.test(location.protocol)) return Promise.resolve(staticStatus);
+    if (Date.now() < statusExpires) return Promise.resolve(lastStatus);
+    if (!pendingStatus) pendingStatus = probeStatus().then(info => {
+      if (!info.static && !info.unreachable && !info.setupRequired) {
+        lastStatus = info;
+        statusExpires = Date.now() + 30000;
+      }
+      return info;
+    }).finally(() => { pendingStatus = null; });
+    return pendingStatus;
   }
   function storedInvite() {
     try { return sessionStorage.getItem("folio.ai.invite") || ""; } catch { return ""; }
   }
   function bindGate(root, info) {
     const label = root.querySelector(".ai-invite");
-    if (!label || !info?.inviteRequired) return;
+    if (!label?.hidden || !info?.inviteRequired) return;
     label.hidden = false;
-    label.querySelector("input").value = storedInvite();
+    const input = label.querySelector("input");
+    input.value ||= storedInvite();
   }
   async function request(action, payload, root, signal) {
     const info = await getStatus();
-    if (!info) throw new Error("当前是静态体验版。请打开已启用文件解析和 AI 的工作台，或先粘贴原文。");
+    if (info.static) throw new Error("当前地址未提供文件解析或 AI 服务。请使用腾讯云上的好好投网址，也可以粘贴原文。");
+    if (info.unreachable) throw new Error("暂时连不上服务，请稍后重试。");
     if (info.setupRequired) throw new Error("请由管理员先在腾讯云配置站点地址和体验码。");
-    const code = root.querySelector(".ai-invite input")?.value.trim() || storedInvite();
-    if (info.inviteRequired && !code) throw new Error("请先输入体验码。");
+    bindGate(root, info);
+    const field = root.querySelector(".ai-invite input");
+    const code = field ? field.value.trim() : storedInvite();
+    if (info.inviteRequired && !code) {
+      field?.focus();
+      if (action === "tailor") throw new Error("请先填写体验码，再生成建议。");
+      throw new Error(root.querySelector('[data-ai="retry-file"]')
+        ? "请先填写体验码，再点「重试读取」。"
+        : "请先填写体验码，再选择文件。");
+    }
     const timeout = AbortSignal.timeout(100000);
-    const response = await fetch("/api/ai/" + action, {
-      method: "POST", signal: signal ? AbortSignal.any([timeout, signal]) : timeout,
-      headers: { "content-type": "application/json", ...(code ? { "x-folio-invite": code } : {}) },
-      body: JSON.stringify(payload),
-    });
-    const data = await response.json();
-    if (!response.ok || !data.ok) throw new Error(data.error || "处理失败，请重试。");
+    let response;
+    try {
+      response = await fetch("/api/ai/" + action, {
+        method: "POST", signal: signal ? AbortSignal.any([timeout, signal]) : timeout,
+        headers: { "content-type": "application/json", ...(code ? { "x-folio-invite": code } : {}) },
+        body: JSON.stringify(payload),
+      });
+    } catch (error) {
+      if (error.name === "AbortError" || error.name === "TimeoutError") throw error;
+      throw new Error("连接中断，请重试。");
+    }
+    const json = response.headers.get("content-type")?.includes("application/json");
+    const data = json ? await response.json().catch(() => null) : null;
+    if (response.status === 401) {
+      statusExpires = 0;
+      bindGate(root, { inviteRequired: true });
+      root.querySelector(".ai-invite input")?.focus();
+    }
+    if (!response.ok || !data?.ok) throw new Error(data?.error || "服务暂未完成处理，请重试。");
     if (code) try { sessionStorage.setItem("folio.ai.invite", code); } catch {}
     return data.data;
   }
@@ -105,8 +152,10 @@
       });
       getStatus().then(info => {
         bindGate(root, info);
-        if (info?.setupRequired) status.textContent = "请先在腾讯云配置站点地址和体验码。";
-        else if (!info?.available) status.textContent = "当前页面的 AI 服务尚未就绪。";
+        if (generate.disabled) return;
+        if (info.setupRequired) status.textContent = "请先在腾讯云配置站点地址和体验码。";
+        else if (info.unreachable) status.textContent = "暂时连不上 AI 服务，可以点击生成重试。";
+        else if (!info.available) status.textContent = "当前页面的 AI 服务尚未就绪。";
       });
       picker.onchange = () => { result = null; review.replaceChildren(); save.hidden = true; status.textContent = ""; };
       generate.onclick = async () => {

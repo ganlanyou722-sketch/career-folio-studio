@@ -362,31 +362,49 @@
       '<label class="re-label">简历原文<textarea rows="9" maxlength="18000" placeholder="也可直接粘贴简历原文"></textarea></label>' +
       (ai?.statusLine || "") + '<div class="re-actions"><label class="re-btn">' + ico("upload") +
       '选择文件<input type="file" accept=".pdf,.docx,.txt,.png,.jpg,.jpeg,.webp" hidden></label>' +
+        '<button type="button" class="re-btn" data-ai="retry-file" hidden>重试读取</button>' +
         btn("import", "确认文字并创建底稿", "check", "re-primary") + "</div>",
       (m, close) => {
         const input = m.querySelector("textarea"), submit = m.querySelector("[data-action]");
         const fileInput = m.querySelector("[type=file]"), status = m.querySelector(".ai-status");
-        ai?.getStatus().then(info => ai.bindGate(m, info));
-        fileInput.onchange = async () => {
-          const file = fileInput.files[0];
-          fileInput.value = "";
-          if (!file) return;
+        const retry = m.querySelector('[data-ai="retry-file"]');
+        let pendingFile;
+        ai?.getStatus().then(info => {
+          if (!m.isConnected) return;
+          ai.bindGate(m, info);
+          if (info.static && !status.textContent) status.textContent = "这个地址可粘贴原文或读取 TXT。PDF、Word 和图片请到腾讯云上的好好投导入。";
+        });
+        async function readSelectedFile() {
+          if (!pendingFile || fileInput.disabled) return;
           const before = input.value;
           submit.disabled = fileInput.disabled = true;
-          if (status) status.textContent = "正在提取原文…";
+          retry.hidden = true;
+          if (status) status.textContent = "正在连接文件服务并提取原文，首次打开可能需要稍等…";
           try {
-            const raw = ai ? await ai.readFile(file, m) : await file.text();
+            const raw = ai ? await ai.readFile(pendingFile, m) : await pendingFile.text();
+            if (!m.isConnected) return;
             if (raw.length > 18000) throw new Error("正文超过 18,000 字符，请缩小范围再导入。");
             if (!raw.trim()) throw new Error("这份文件没有可读取的文字。");
             if (input.value !== before) throw new Error("原文已在读取期间改动，已保留你的输入。");
             input.value = raw;
+            pendingFile = null;
             if (status) status.textContent = "原文已提取，请检查分段、列顺序和数字。";
           } catch (error) {
-            if (status) status.textContent = error.message;
+            if (!m.isConnected) return;
+            retry.hidden = false;
+            if (status) status.textContent = error.name === "TimeoutError" ? "文件读取超时，请重试。" : error.message;
             else toast(error.message);
           } finally {
             submit.disabled = fileInput.disabled = false;
           }
+        }
+        retry.onclick = readSelectedFile;
+        fileInput.onchange = () => {
+          if (fileInput.files[0]) {
+            pendingFile = fileInput.files[0];
+            readSelectedFile();
+          }
+          fileInput.value = "";
         };
         submit.onclick = () => {
           const lines = input.value.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
