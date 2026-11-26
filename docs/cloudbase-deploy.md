@@ -9,7 +9,7 @@
 | 控制台选项 | 填写内容 |
 | --- | --- |
 | 服务名 | `career-folio-ai` |
-| 代码来源 | Git 仓库部署，选择 `ganlanyou722-sketch/career-folio-studio` 和包含 AI 改动的分支。PR 合并前使用 `feature/skill-driven-ai-resume` |
+| 代码来源 | Git 仓库部署，选择 `ganlanyou722-sketch/career-folio-studio` 的 `main` 分支 |
 | 上传代码包 | 控制台也支持上传部署 ZIP，确保压缩包打开后可以直接看到 `Dockerfile` |
 | 目标目录和 Dockerfile | 仓库根目录与 `Dockerfile` |
 | 容器监听端口 | `4399` |

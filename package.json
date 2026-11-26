@@ -2,7 +2,7 @@
   "name": "career-folio-studio",
   "private": true,
   "version": "1.0.0",
-  "description": "履历间 · 中文求职工作台与可替换技能包",
+  "description": "好好投 · 中文求职工作台与可替换技能包",
   "scripts": {
     "skills:list": "node tools/skills.mjs list",
     "skills:check": "node tools/skills.mjs check",

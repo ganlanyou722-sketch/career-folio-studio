@@ -119,23 +119,7 @@
     const s = f.source ?? f.file ?? "经历库";
     return typeof s === "object" ? s.name || s.title || "经历库" : s;
   }
-  /* 版本 6：领域词表直接用证据内核（含版本 2 起补的电商、内容、投放等词）；内核缺失时回落到版本 1 的 14 组。 */
-  const domains = (window.FolioEvidence && window.FolioEvidence.domains) || [
-    ["用户调研", "用户研究", "用户访谈", "访谈用户"],
-    ["用户反馈", "试用反馈", "反馈归纳", "整理反馈"],
-    ["产品试用", "试用反馈", "试点", "组织试用"],
-    ["原型设计", "交互原型", "原型"],
-    ["业务数据", "数据分析", "业务分析"],
-    ["需求分析", "需求梳理", "需求文档", "用户需求"],
-    ["客户签约", "推进签约", "签订合同"],
-    ["评测设计", "离线评测", "评测方案"],
-    ["用户增长", "增长实验"],
-    ["性能优化", "性能评估"],
-    ["行业研究", "行业分析", "研报"],
-    ["风险评估", "风险识别"],
-    ["编程开发", "软件开发", "开发模块"],
-    ["社群运营", "社群活动"],
-  ];
+  const domains = window.EvidenceCore.DOMAINS;
   function evidence(jd, requirement, library) {
     const mark = jd.checks?.[requirement];
     if (mark?.kind === "gap")
@@ -149,7 +133,7 @@
     const parts = domains
       .filter((set) => set.some((s) => requirement.includes(s)))
       .flat();
-    /* 版本 6：长要求按分句前 12 字兜底匹配，避免整句对不上就被判成缺证据。 */
+    /* 长要求按分句前 12 字匹配，保留整句未命中时的部分证据。 */
     const clauses = String(requirement)
       .split(/[，,、；;：:（）()]/)
       .map((s) => s.trim())

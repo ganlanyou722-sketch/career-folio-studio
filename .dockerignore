@@ -2,5 +2,3 @@ node_modules
 .git
 .env*
 coverage
-web/__v[1-5]__
-web/version-dock.js

@@ -8,79 +8,16 @@
 
 > **在线体验** [打开好好投](https://career-folio-ai-354091-10-1540952470.sh.run.tcloudbase.com)。材料和简历稿保留在当前浏览器，AI 改写需输入体验码。
 
-也可以在浏览器直接打开 [web/index.html](web/index.html) 体验，或在仓库根目录运行下列命令，再访问 `http://127.0.0.1:4398`。
+本地开发需要 Node.js 22.15 或更新版本。在仓库根目录运行以下命令，并访问 `http://127.0.0.1:4399`。
 
 ```sh
-python -m http.server 4398 --bind 127.0.0.1 --directory web
+npm ci
+npm start
 ```
 
 ## 当前工作台
 
-线上统一使用 V6，入口为 [web/index.html](web/index.html)。早期版本保存在代码仓库中供开发回顾，腾讯云上的旧路径会回到当前工作台。浏览器里的材料、经历、JD 和简历稿沿用原有存储。
-
-## 版本 1 → 6 后端逻辑清单
-
-按版本逐层叠加，每层都可单独回退；版本 4 只动前端形态，版本 6 只做「界面回 V1 + 内核接入」。
-
-| 版本 | 新增的后端逻辑 | 落在哪 |
-| --- | --- | --- |
-| 1 | 岗位证据对照（14 组领域词）、匹配排序、简历本地检查、面经案例库 | 各 `modules/*/index.js` |
-| 2 | 风险规则 13 条、JD 解析（去小标题）、要求—经历匹配、简历审计、面经核实分级、材料库体检 | `shared/evidence-core.js`（首次引入） |
-| 3 | 证据台账 `buildLedger`（L1/L2/L3 分级 + 来源 A/B/C/D + 当面问法）、匹配雷达 `radarDims`（五维各附依据）、复盘 `reviewAnswer`（STAR 诊断、改写、追问、预估分）、核实等级统计 `credibilityMix` | 同上 + `server/index.js` 新增 `/api/ledger`、`/api/radar`、`/api/interview/review` |
-| 4 | 无后端改动，只把结果搬进一屏三卡 | — |
-| 5 | 规则补词（不缴纳社保 / 社保自理 / 转正补缴）、`parseJD` 排除风险条款与小标题、领域词补 9 组（店铺运营、选品、投放、达人、素材、结算、复盘、客服）、`rewriteStar` 按句序定位、`estimate` 不低于当前分 | `shared/evidence-core.js` |
-| 6 | ① 内核以 `window.FolioEvidence` 暴露给页面；② 岗位匹配台的领域词改为读内核（板块从 14 组升到 25 组）；③ 长要求按分句前 12 字兜底匹配；④ 前端与服务端共用同一份规则，接口 9 个不变 | `shared/v6-bridge.js` + `modules/match/index.js` |
-
-版本 6 的原则是**同槽位换引擎**：岗位匹配台原有的「证据覆盖 / 缺口与待补 / 推荐依据」三行照旧渲染，只是判定的词表与匹配方式换成版本 5 的内核。因此页面看起来就是版本 1，算得更准的部分在后面。
-
-### 版本 5 做了什么：在 v3 的布局上把三条链路做实
-
-版本 4 把工作台整体藏起来换成三张卡，路径变短了，但用户要的是「原来那套工作台别动，功能在里面补齐」。版本 5 回到 v3 布局，不动侧栏、不动顶栏、不动面包屑，只把 01/02/03 三个面板变成能当场跑完的工作面：
-
-| 面板 | 对应痛点 | 贴什么 | 当场出什么 |
-| --- | --- | --- | --- |
-| 01 岗位尽调 | 看不清对方 | JD 原文（公司材料选填） | 一句结论（`1 处必须当面问清，另有 2 处要确认`）、证据覆盖率、L1/L2/L3 着色台账（原句 + 来源等级 + 当面问法 + 复制问法）、一页式风险卡片 |
-| 02 简历对照 | 说不清自己 | 简历段落（JD 自动沿用 01） | JD 覆盖度、逐条对照表（要求 / 对应段落 / 判定）、五维雷达（每维附依据）、按优先级排的缺口清单、对齐建议 |
-| 03 面试复盘 | 留不下证据 | 题目 + 口述回答 | 结论句（缺哪几格）、当前分与改写后预估分、S/T/A/R 四格、STAR 改写稿、追问预测、核实等级分布、三段汇总的证据台账导出 |
-
-细节上补了四处：本页面板已完整，旧版同页工作台折叠成一行「展开旧版工作台（可选）」；01 不再要求先选岗位；02 优先用手贴的简历稿（不再被历史草稿顶掉）；03 的示例是一条「说了过程没说结果」的常见回答，复盘后能直接看到缺 T 与 R。
-
-每个面板都能一键跑示例，链接可以直接发人：
-
-- 示例 · 岗位尽调 `?demo=check#match`
-- 示例 · 简历对照 `?demo=align#resume`
-- 示例 · 面试复盘 `?demo=review#interview`
-
-### 版本 4 做了什么（保留可切）
-
-一屏三张卡，每张卡都是「贴一段文字 → 出结果」，不需要登录、不需要预填、不需要先选岗位。
-
-### 版本 3 做了什么
-
-三条链路都遵循同一句话：**结论必须能指回原文**。
-
-| 链路 | 输入 | 产出 | 面板上的指标 |
-| --- | --- | --- | --- |
-| 岗位反向尽调 | JD + 公司材料 | 证据台账、L1/L2/L3 风险分级、可当面问的话术、一页式风险卡片 | 证据覆盖率、风险命中数、误伤率（待标注样本）、报告采纳率（待测） |
-| 简历–JD 证据对照 | JD + 简历稿 + 材料库 | 逐条对照表、匹配雷达（每维附依据）、按优先级排的缺口清单、对齐建议 | JD 覆盖度、证据缺口数、无出处段落数、建议采纳率（待测） |
-| 面试复盘证据链 | 题目 + 口述回答 | 逐题诊断卡、STAR 改写稿、追问预测、核实等级分布 | 当前分 / 改写后预估分、缺格数、面经可溯源比例 |
-
-口径说明：识别准确率、误伤率、采纳率这些指标必须在真实标注样本上测算，界面里标"待测"的地方就是还没算，不做预填。改写后的分数标的是"预估"，不冒充实测。
-
-### 连服务端运行
-
-证据计算有两种跑法：只起静态服务时在前端本地算；起 Node 服务则前后端共用同一份规则。
-
-```sh
-node server/index.js          # 默认 127.0.0.1:4399
-```
-
-```sh
-curl -s http://127.0.0.1:4399/api/health
-curl -s -X POST http://127.0.0.1:4399/api/risk/scan -H "content-type: application/json" -d '{"text":"接受大小周，试用期不缴社保，入职需缴纳培训费 2000 元"}'
-```
-
-接口包括 `/api/health`、`/api/risk/scan`、`/api/jd/parse`、`/api/match`、`/api/resume/audit`、`/api/interview/diagnose`、`/api/library/audit`，以及 `/api/ledger`、`/api/radar`、`/api/interview/review`。前端启动时会探活，连不上服务端就自动回落到本地计算，所以纯静态部署也有完整功能。
+正式工作台和腾讯云发布使用 `main` 分支。浏览器入口在 [web/index.html](web/index.html)，Node 服务在 [server/index.js](server/index.js)。岗位匹配和服务端分析共用 [证据规则](web/shared/evidence-core.js)，文档解析与模型调用在 [server](server/)。
 
 ## 代码与技能位置
 
@@ -91,7 +28,7 @@ curl -s -X POST http://127.0.0.1:4399/api/risk/scan -H "content-type: applicatio
 | 简历优化台与版本仓库 | [web/modules/resume](web/modules/resume/) | [skills/resume](skills/resume/) |
 | 面试打磨台 | [web/modules/interview](web/modules/interview/) | [skills/interview](skills/interview/) |
 
-方向与任务选择在 [web/modules/start](web/modules/start/)。工作台导航、本机数据读写、共用视图和插画在 [web/shared](web/shared/)。PPTX 导出组件及第三方许可在 [web/vendor](web/vendor/)。页面关系、事实追溯和版本要求见[原始 PRD](docs/PRD-v1.0.md)。
+方向与任务选择在 [web/modules/start](web/modules/start/)。工作台导航、本机数据读写、共用视图和插画在 [web/shared](web/shared/)。PPTX 导出组件及第三方许可在 [web/vendor](web/vendor/)。页面关系与事实追溯见[原始 PRD](docs/PRD-v1.0.md)。
 
 ## 协作时怎样换 skill
 
@@ -108,24 +45,17 @@ node tools/skills.mjs check
 node --test tools/skills.test.mjs
 ```
 
-调用接口和新增包示例见 [skills/README.md](skills/README.md)。团队成员可用各自的分支提交 skill 修改，在 Pull Request 中附上一组虚构输入和预期变化，方便其他人复核。
+调用接口和新增包示例见 [skills/README.md](skills/README.md)。已发布的修改统一从 `main` 读取。
 
 ## 当前可用的交互
 
 资料支持拖入归档、悬停抽页、原文核对与经历关联。多个 JD 以塔罗暗纹牌呈现，分析后按偏好和经历证据排序。简历可编辑、撤销、预览文字改写，点击定稿后会保存带喷雾动效的版本快照。PPTX 可编辑，PDF 通过浏览器打印保存。面试准备可以绑定指定岗位和简历修订。
 
-版本 2 在四个工作台上各加了一层核验面板，原则是「每条结论都能指回原文」：
-
-- **经历体检**：材料已核对率、经历挂原件率、可量化率，逐条列出待核对材料与缺数字的经历。
-- **岗位核验**：13 条风险规则分 L1/L2/L3，命中处引用 JD 原句并给出可以当面问的问法，再按证据强弱排出优先补的缺口。
-- **投递自检**：JD 覆盖率、无出处段落、缺数字段落与未覆盖清单，可一键复制成自检报告。
-- **回答诊断**：粘贴口述回答，按 STAR 四格拆解、判定有无量化、给分并预测三条追问；结果只留本机。
-
-前端内置标明来源的演示数据。资料库原件保存在当前浏览器的 IndexedDB，工作稿和选项保存在 localStorage。静态站可使用浏览器规则体验匹配和编辑。需要导入 PDF／DOCX 或生成 AI 定向改写时，使用下方的 Node 服务。
+前端内置标明来源的演示数据。资料库原件保存在当前浏览器的 IndexedDB，工作稿和选项保存在 localStorage。
 
 ## 用自己的简历和 JD 生成建议
 
-需要 Node.js 22.15 或更新版本。运行 `npm ci`，将 [.env.example](.env.example) 复制为 `.env`，只填 `DEEPSEEK_API_KEY`。运行 `npm start` 后访问 `http://127.0.0.1:4399`。
+本地启用 AI 时，将 [.env.example](.env.example) 复制为 `.env`，填写 `DEEPSEEK_API_KEY` 后启动服务。
 
 默认调用 DeepSeek 官方 Chat Completions 的 `deepseek-flash`，覆盖文字改写、事实复核和截图转录。可设置 `CV_MODEL_NAME=deepseek-v4-pro` 将文字改写和复核切换到 V4 Pro，截图仍交给 Flash。使用其他兼容服务时，填写其完整 `CV_MODEL_ENDPOINT`、`CV_MODEL_NAME` 和该服务自己的 `CV_MODEL_KEY`。使用 DeepSeek 以外的地址时，服务不会发送 `DEEPSEEK_API_KEY`。[DeepSeek 模型与价格](https://api-docs.deepseek.com/quick_start/pricing/)
 
